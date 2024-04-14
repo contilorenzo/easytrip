@@ -1,6 +1,7 @@
 export enum TranslationsKeys {
   addNewTrip,
   addFirstTrip,
+  yourTrips,
 }
 
 export type Translations = {

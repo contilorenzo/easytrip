@@ -9,5 +9,5 @@ export const t = (
   label: TranslationsKeys,
   language: Languages = Languages.IT
 ) => {
-  return languages[language][label]
+  return languages?.[language]?.[label] ?? '~~ MISSING TRANSLATION ~~'
 }
