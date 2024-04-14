@@ -1,13 +1,12 @@
 import React from 'react'
-import { Text } from 'react-native'
-import { Icon } from 'react-native-elements'
+import AddNewTrip from '../AddNewTrip/AddNewTrip'
+import { SafeAreaView } from 'react-native'
 
 const Homepage = () => {
   return (
-    <>
-      <Text>Home Screen</Text>
-      <Icon name="rowing" />
-    </>
+    <SafeAreaView style={{ flex: 1, padding: 10 }}>
+      <AddNewTrip isFirstTrip={true} />
+    </SafeAreaView>
   )
 }
 
