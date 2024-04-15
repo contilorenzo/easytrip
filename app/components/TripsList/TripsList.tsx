@@ -10,7 +10,7 @@ const TripsList = () => {
     <View style={wrapperStyles}>
       <Text style={textStyles}>{t(TranslationsKeys.yourTrips)}</Text>
       {mockTrips.map((trip) => (
-        <TripCard trip={trip} />
+        <TripCard trip={trip} key={trip.id} />
       ))}
     </View>
   )

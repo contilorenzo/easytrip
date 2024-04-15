@@ -41,6 +41,7 @@ const BottomNavigation = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size, focused }) =>
           getTabBarIcon({ color, size, focused, route }),
+        headerShown: false,
       })}
     >
       {navigationItems.map((item: NavigationItem) => (

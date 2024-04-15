@@ -2,10 +2,10 @@ import React from 'react'
 import { Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { t } from '../../translations'
-import { Translations, TranslationsKeys } from '../../translations/types'
+import { TranslationsKeys } from '../../translations/types'
 
-const AddNewTrip = ({ isFirstTrip }: Props) => {
-  const handlePress = () => alert('Viaggio aggiunto!')
+const AddNewTrip = ({ isFirstTrip, navigation }) => {
+  const handlePress = () => navigation.navigate('New-trip')
 
   return (
     <TouchableOpacity style={wrapperStyles} onPress={handlePress}>

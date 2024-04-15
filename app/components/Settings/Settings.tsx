@@ -1,8 +1,7 @@
-import React from 'react'
-import { Text } from 'react-native'
+import WorkInProgress from '../WorkInProgress/WorkInProgress'
 
-const Settings = () => {
-  return <Text>Settings Screen</Text>
+const Settings = ({ navigation }) => {
+  return <WorkInProgress text="Settings Screen" />
 }
 
 export default Settings

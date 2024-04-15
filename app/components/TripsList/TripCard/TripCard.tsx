@@ -42,6 +42,7 @@ const wrapperStyles: ViewStyle = {
 
 const gridStyles: ViewStyle = {
   flexDirection: 'row',
+  gap: 5,
   justifyContent: 'space-between',
   alignItems: 'center',
 }

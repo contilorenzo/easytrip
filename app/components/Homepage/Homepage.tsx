@@ -1,14 +1,16 @@
 import React from 'react'
-import AddNewTrip from '../AddNewTrip/AddNewTrip'
-import { SafeAreaView } from 'react-native'
-import TripsList from '../TripsList/TripsList'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import HomeScreen from '../../views/Homepage/HomeScreen'
+import NewTripScreen from '../../views/Homepage/NewTripScreen'
+
+const Tab = createNativeStackNavigator()
 
 const Homepage = () => {
   return (
-    <SafeAreaView style={{ flex: 1, padding: 10, gap: 20 }}>
-      <AddNewTrip isFirstTrip={true} />
-      <TripsList />
-    </SafeAreaView>
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="New-trip" component={NewTripScreen} />
+    </Tab.Navigator>
   )
 }
 

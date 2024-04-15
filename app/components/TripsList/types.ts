@@ -1,6 +1,7 @@
 export interface Trip {
-    city: string,
-    country: string,
-    startDate: Date,
-    endDate: Date,
+  id: number
+  city: string
+  country: string
+  startDate: Date
+  endDate: Date
 }
