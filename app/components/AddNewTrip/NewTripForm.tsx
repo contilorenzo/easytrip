@@ -7,11 +7,14 @@ import { useState } from 'react'
 import { NewTrip } from '../TripsList/types'
 import { Button } from 'react-native'
 
+const today = new Date()
+const oneWeekFromToday = new Date(Date.now() + 604800000);
+
 const NewTripForm = () => {
   const [country, setCountry] = useState<string>()
   const [city, setCity] = useState<string>()
-  const [startDate, setStartDate] = useState<Date>()
-  const [endDate, setEndDate] = useState<Date>()
+  const [startDate, setStartDate] = useState<Date>(today)
+  const [endDate, setEndDate] = useState<Date>(oneWeekFromToday)
 
   const isFormValid = !!country && !!city && !!startDate && !!endDate
 
@@ -29,10 +32,12 @@ const NewTripForm = () => {
       />
       <DateTimeField
         label={t(TranslationsKeys.trip_startDate)}
+        value={today}
         onChange={setStartDate}
       />
       <DateTimeField
         label={t(TranslationsKeys.trip_endDate)}
+        value={oneWeekFromToday}
         onChange={setEndDate}
       />
       <Button
