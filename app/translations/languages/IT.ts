@@ -9,6 +9,8 @@ const IT: Translations = {
   [tk.trip_country]: 'Paese',
   [tk.trip_startDate]: 'Data inizio',
   [tk.trip_endDate]: 'Data fine',
+  [tk.trip_addTrip]: 'Aggiungi viaggio',
+  [tk.trip_newTripPageTitle]: 'Nuovo viaggio',
 }
 
 export default IT

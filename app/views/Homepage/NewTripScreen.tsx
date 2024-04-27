@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native'
 
 const NewTripScreen = ({ navigation }) => {
   return (
-    <SafeAreaView style={{ flex: 1, padding: 10, gap: 20 }}>
+    <SafeAreaView style={{ flex: 1, margin: 10, gap: 20 }}>
       <NewTripForm />
     </SafeAreaView>
   )

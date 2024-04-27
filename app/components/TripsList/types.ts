@@ -5,3 +5,10 @@ export interface Trip {
   startDate: Date
   endDate: Date
 }
+
+export interface NewTrip {
+  city: string
+  country: string
+  startDate: Date
+  endDate: Date
+}

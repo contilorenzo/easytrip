@@ -1,12 +1,12 @@
 import { ViewStyle, TextInput, Text, View } from 'react-native'
 
-const TextField = ({ label, value, onChange }: Props) => {
+const TextField = ({ label, value, onChange = defaultOnChange }: Props) => {
   return (
     <View style={wrapperStyles}>
       {label && <Text>{label}</Text>}
       <TextInput
         style={inputStyles}
-        onChangeText={onChange ?? defaultOnChange}
+        onChangeText={onChange}
         value={value ?? ''}
       />
     </View>

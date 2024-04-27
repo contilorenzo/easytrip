@@ -5,7 +5,9 @@ export enum TranslationsKeys {
   trip_city,
   trip_country,
   trip_startDate,
-  trip_endDate
+  trip_endDate,
+  trip_addTrip,
+  trip_newTripPageTitle,
 }
 
 export type Translations = {
