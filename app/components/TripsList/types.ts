@@ -9,6 +9,14 @@ export interface Trip {
 export interface NewTrip {
   city: string
   country: string
-  startDate: Date
-  endDate: Date
+  startDate: string
+  endDate: string
+}
+
+export interface TripDTO {
+  id: number
+  city: string
+  country: string
+  startDate: string
+  endDate: string
 }

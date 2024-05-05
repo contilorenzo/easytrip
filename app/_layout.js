@@ -1,23 +1,22 @@
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import BottomNavigation from "./components/BottomNavigation/BottomNavigation";
+import * as SplashScreen from 'expo-splash-screen'
+import { useEffect } from 'react'
+import BottomNavigation from './components/BottomNavigation/BottomNavigation'
 
-SplashScreen.preventAutoHideAsync();
-
+SplashScreen.preventAutoHideAsync()
 const Layout = () => {
   const showLayout = async () => {
-    await SplashScreen.hideAsync();
-  };
+    await SplashScreen.hideAsync()
+  }
 
   useEffect(() => {
-    showLayout();
-  }, []);
+    showLayout()
+  }, [])
 
   return (
     <>
       <BottomNavigation />
     </>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

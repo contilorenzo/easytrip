@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { t } from '../../translations'
 import { TranslationsKeys } from '../../translations/types'
 
-const AddNewTrip = ({ isFirstTrip, navigation }) => {
+const AddNewTripButton = ({ isFirstTrip, navigation }) => {
   const handlePress = () => navigation.navigate('New-trip')
 
   return (
@@ -44,7 +44,6 @@ const wrapperStyles: ViewStyle = {
 const textStyles: TextStyle = {
   color: 'white',
   display: 'flex',
-  fontFamily: 'Roboto, sans-serif',
   fontWeight: '600',
 }
 
@@ -53,4 +52,4 @@ const iconStyle: TextStyle = {
   display: 'flex',
 }
 
-export default AddNewTrip
+export default AddNewTripButton
