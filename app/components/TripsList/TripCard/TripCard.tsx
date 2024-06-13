@@ -7,21 +7,31 @@ import {
   View,
   TextStyle,
 } from 'react-native'
+import { TranslationsKeys } from '../../../translations/types'
+import { t } from '../../../translations'
 
 const getRemainingDays = (dateUntil: Date): string => {
   const diff = Math.abs(dateUntil.getTime() - new Date().getTime())
   return Math.ceil(diff / (1000 * 3600 * 24)).toString()
 }
 
-const TripCard = ({ trip }: Props) => {
+const TripCard = ({ trip, navigation }: Props) => {
+  const handleTripCardClick = () => {
+    navigation.navigate('Details', { trip: trip })
+  }
+
   return (
-    <TouchableOpacity style={wrapperStyles}>
+    <TouchableOpacity style={wrapperStyles} onPress={handleTripCardClick}>
       <View style={gridStyles}>
         <Text style={cityNameStyles}>{trip.city}</Text>
-        <View>
-          <Text>Tra</Text>
+        <View style={{ alignItems: 'flex-end' }}>
+          <Text>{t(TranslationsKeys.remainingDays)}</Text>
           <Text style={remainingDaysStyles}>
-            {getRemainingDays(trip.startDate)}
+            {getRemainingDays(trip.startDate) +
+              ' ' +
+              (+getRemainingDays(trip.startDate) === 1
+                ? t(TranslationsKeys.day)
+                : t(TranslationsKeys.days))}
           </Text>
         </View>
       </View>
@@ -31,6 +41,7 @@ const TripCard = ({ trip }: Props) => {
 
 interface Props {
   trip: Trip
+  navigation: any
 }
 
 const wrapperStyles: ViewStyle = {
@@ -48,12 +59,13 @@ const gridStyles: ViewStyle = {
 }
 
 const cityNameStyles: TextStyle = {
-  fontSize: 18,
+  fontSize: 20,
   fontWeight: '600',
   textTransform: 'capitalize',
 }
 
 const remainingDaysStyles: TextStyle = {
+  fontSize: 16,
   fontWeight: '600',
   textAlign: 'right',
 }

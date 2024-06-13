@@ -8,6 +8,11 @@ export enum TranslationsKeys {
   trip_endDate,
   trip_addTrip,
   trip_newTripPageTitle,
+  day,
+  days,
+  remainingDays,
+  from,
+  to,
 }
 
 export type Translations = {

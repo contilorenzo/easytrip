@@ -11,6 +11,11 @@ const IT: Translations = {
   [tk.trip_endDate]: 'Data fine',
   [tk.trip_addTrip]: 'Aggiungi viaggio',
   [tk.trip_newTripPageTitle]: 'Nuovo viaggio',
+  [tk.day]: 'giorno',
+  [tk.days]: 'giorni',
+  [tk.remainingDays]: 'Tra',
+  [tk.from]: 'Dal',
+  [tk.to]: 'al',
 }
 
 export default IT

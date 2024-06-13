@@ -7,6 +7,7 @@ import * as SQLite from 'expo-sqlite'
 import { createTripsTable, getDatabase } from '../common/db/utils'
 import { Trip, TripDTO } from './types'
 import { useFocusEffect } from '@react-navigation/native'
+import { mockTrips } from '../../../mocks/trips'
 
 const formatTrips = (trips: TripDTO[]): Trip[] => {
   const formattedTrips = trips.map((trip) => ({
@@ -18,7 +19,7 @@ const formatTrips = (trips: TripDTO[]): Trip[] => {
   return formattedTrips
 }
 
-const TripsList = () => {
+const TripsList = ({ navigation }: Props) => {
   const [trips, setTrips] = useState<Trip[]>([])
   const db = getDatabase()
 
@@ -33,17 +34,21 @@ const TripsList = () => {
           (_, { rows: { _array } }) => setTrips(formatTrips(_array))
         )
       })
-    }
+    } else setTrips(mockTrips)
   })
 
   return (
     <View style={wrapperStyles}>
       <Text style={textStyles}>{t(TranslationsKeys.yourTrips)}</Text>
       {trips.map((trip) => (
-        <TripCard trip={trip} key={trip.id} />
+        <TripCard trip={trip} key={trip.id} navigation={navigation} />
       ))}
     </View>
   )
+}
+
+interface Props {
+  navigation: any
 }
 
 const wrapperStyles: ViewStyle = {
