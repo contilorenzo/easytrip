@@ -1,8 +1,48 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ViewStyle, View, TextStyle, Text } from 'react-native'
-import { Trip } from '../TripsList/types'
+import { StepType, Trip, TripStep } from '../TripsList/types'
 import { format } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons'
+import TripSteps from './TripSteps/TripSteps'
+
+const mockSteps: TripStep[] = [
+  {
+    type: StepType.JOURNEY,
+    title: 'Aereo BGY - ZAD',
+    startDateTime: '2024-06-14T06:00:00.000Z',
+    endDateTime: '2024-06-14T07:10:00.000Z',
+  },
+  {
+    type: StepType.VISIT,
+    title: 'Petrcane Beach',
+    startDateTime: '2024-06-14T09:00:00.000Z',
+    endDateTime: '2024-06-14T12:00:00.000Z',
+  },
+  {
+    type: StepType.JOURNEY,
+    title: 'Viaggio in auto',
+    startDateTime: '2024-06-14T12:00:00.000Z',
+    endDateTime: '2024-06-14T14:00:00.000Z',
+  },
+  {
+    type: StepType.VISIT,
+    title: 'Laghi Plitvice',
+    startDateTime: '2024-06-14T14:00:00.000Z',
+    endDateTime: '2024-06-14T22:00:00.000Z',
+  },
+  {
+    type: StepType.JOURNEY,
+    title: 'Rientro a Zara',
+    startDateTime: '2024-06-14T22:00:00.000Z',
+    endDateTime: '2024-06-14T23:00:00.000Z',
+  },
+  {
+    type: StepType.ACCOMODATION,
+    title: 'Apartments Jermen',
+    startDateTime: '2024-06-14T23:00:00.000Z',
+    endDateTime: '2024-06-15T09:00:00.000Z',
+  },
+]
 
 const TripDetails = ({ trip }: Props) => {
   return (
@@ -24,6 +64,7 @@ const TripDetails = ({ trip }: Props) => {
           <Text>{format(trip.endDate, 'MMMM')}</Text>
         </View>
       </View>
+      <TripSteps steps={trip.steps ?? mockSteps} />
     </View>
   )
 }
@@ -50,7 +91,7 @@ const headerStyles: TextStyle = {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-around',
-  marginTop: 10
+  marginTop: 10,
 }
 
 const datesWrapperStyles: TextStyle = {
