@@ -1,34 +1,17 @@
-import { Text, View, ViewStyle } from "react-native"
-import { TripStep } from "../../../../TripsList/types"
-import { Ionicons } from '@expo/vector-icons'
-import { getDuration } from "./utils"
+import { ViewStyle } from 'react-native'
+import { TripStep } from '../../types'
+import DefaultStep from './DefaultStep'
 
 const VisitStep = ({ step }: Props): React.ReactNode => {
-  return (
-    <View style={wrapperStyles}>
-      <Ionicons name="image" size={20} />
-      <Text>{step.title}</Text>
-      <Text>{getDuration(step)}h</Text>
-    </View>
-  )
+  return <DefaultStep overrideStyle={styles} step={step} icon="image" />
 }
 
 interface Props {
-    step: TripStep
+  step: TripStep
 }
 
-const wrapperStyles: ViewStyle = {
-  alignItems: 'center',
+const styles: ViewStyle = {
   backgroundColor: '#C6C8EE',
-  borderColor: 'lightgray',
-  borderRadius: 8,
-  borderWidth: 1,
-  columnGap: 10,
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  padding: 12,
-  width: '100%',
 }
 
 export default VisitStep

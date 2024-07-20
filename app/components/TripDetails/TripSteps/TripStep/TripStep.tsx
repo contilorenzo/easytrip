@@ -1,10 +1,10 @@
 import { Text, View, ViewStyle } from 'react-native'
-import { StepType, TripStep as TripStepType } from '../../../TripsList/types'
+import { StepType, TripStep as TripStepType } from '../types'
 import AccomodationStep from './StepTypes/AccomodationStep'
 import JourneyStep from './StepTypes/JourneyStep'
 import VisitStep from './StepTypes/VisitStep'
 
-const renderComponentByStepType = (step: TripStepType): React.ReactNode => {
+const renderComponentByStepType = (step: TripStepType<any>): React.ReactNode => {
   const components = {
     [StepType.ACCOMODATION]: <AccomodationStep step={step} />,
     [StepType.JOURNEY]: <JourneyStep step={step} />,
@@ -25,7 +25,7 @@ const TripStep = ({ step }: Props) => {
 }
 
 interface Props {
-  step: TripStepType
+  step: TripStepType<any>
 }
 
 export default TripStep

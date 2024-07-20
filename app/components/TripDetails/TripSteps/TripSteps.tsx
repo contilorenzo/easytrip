@@ -1,5 +1,5 @@
 import { TouchableOpacity, View, ViewStyle } from 'react-native'
-import { TripStep as TripStepType } from '../../TripsList/types'
+import { TripStep as TripStepType } from '../TripSteps/types'
 import TripStep from './TripStep/TripStep'
 
 const TripSteps = ({ steps }: Props) => {
@@ -15,7 +15,7 @@ const TripSteps = ({ steps }: Props) => {
 }
 
 interface Props {
-  steps: TripStepType[]
+  steps: TripStepType<any>[]
 }
 
 export default TripSteps

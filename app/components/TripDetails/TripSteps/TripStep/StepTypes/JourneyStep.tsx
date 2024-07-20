@@ -1,34 +1,35 @@
-import { Text, View, ViewStyle } from 'react-native'
-import { TripStep } from '../../../../TripsList/types'
+import { ViewStyle } from 'react-native'
+import { JourneyData, TripStep, VEHICLES } from '../../types'
+import DefaultStep from './DefaultStep'
 import { Ionicons } from '@expo/vector-icons'
-import { getDuration } from './utils'
+import { IonIcon } from '../../../../common/types'
 
 const JourneyStep = ({ step }: Props): React.ReactNode => {
   return (
-    <View style={wrapperStyles}>
-      <Ionicons name="airplane" size={20} />
-      <Text>{step.title}</Text>
-      <Text>{getDuration(step)}h</Text>
-    </View>
+    <DefaultStep overrideStyle={styles} step={step} icon={getStepIcon(step)} />
   )
 }
 
-interface Props {
-  step: TripStep
+const getStepIcon = (step: TripStep<JourneyData>) => {
+  const vehicle = step.extraData.vehicle
+
+  const icons = {
+    [VEHICLES.PLANE]: 'airplane',
+    [VEHICLES.CAR]: 'car',
+    [VEHICLES.BUS]: 'bus',
+    [VEHICLES.FEET]: 'walk',
+    [VEHICLES.TRAIN]: 'train',
+  }
+
+  return (icons[vehicle] ?? 'car') as IonIcon
 }
 
-const wrapperStyles: ViewStyle = {
-  alignItems: 'center',
+interface Props {
+  step: TripStep<JourneyData>
+}
+
+const styles: ViewStyle = {
   backgroundColor: '#C8D0D0',
-  borderColor: 'lightgray',
-  borderRadius: 8,
-  borderWidth: 1,
-  columnGap: 10,
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  padding: 12,
-  width: '100%',
 }
 
 export default JourneyStep

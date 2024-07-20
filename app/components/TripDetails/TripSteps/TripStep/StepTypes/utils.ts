@@ -1,6 +1,6 @@
-import { TripStep } from '../../../../TripsList/types'
+import { TripStep } from '../../types'
 
-export const getDuration = (step: TripStep) => {
+export const getDurationInHours = (step: TripStep) => {
   const startDateTime = new Date(step.startDateTime)
   const endDateTime = new Date(step.endDateTime)
 

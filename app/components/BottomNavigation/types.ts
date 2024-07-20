@@ -1,13 +1,13 @@
 import { ParamListBase, RouteProp } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+import { IonIcon } from '../common/types'
 
 export interface NavigationItem {
   label: string
   path: string
   component: () => React.ReactNode
   icon: {
-    default: keyof typeof Ionicons.glyphMap
-    active: keyof typeof Ionicons.glyphMap
+    default: IonIcon
+    active: IonIcon
   }
 }
 

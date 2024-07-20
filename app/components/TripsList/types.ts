@@ -1,3 +1,5 @@
+import { TripStep } from "../TripDetails/TripSteps/types"
+
 export interface Trip {
   id: number
   city: string
@@ -5,20 +7,6 @@ export interface Trip {
   startDate: Date
   endDate: Date
   steps?: TripStep[]
-}
-
-export enum StepType {
-  ACCOMODATION = 'ACCOMODATION',
-  JOURNEY = 'JOURNEY',
-  VISIT = 'VISIT'
-}
-
-export interface TripStep {
-  type: StepType
-  startDateTime: string
-  endDateTime: string
-  title: string
-  location?: string
 }
 
 export interface NewTrip {
