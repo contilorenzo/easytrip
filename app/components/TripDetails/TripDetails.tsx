@@ -6,7 +6,9 @@ import TripSteps from './TripSteps/TripSteps'
 import { Trip } from '../TripsList/types'
 import { mockSteps } from '../../../mocks/steps'
 
-const TripDetails = ({ trip }: Props) => {
+const TripDetails = ({ trip, navigation }: Props) => {
+  alert(JSON.stringify(trip))
+
   return (
     <View style={wrapperStyles}>
       <View style={headerStyles}>
@@ -26,13 +28,18 @@ const TripDetails = ({ trip }: Props) => {
           <Text>{format(trip.endDate, 'MMMM')}</Text>
         </View>
       </View>
-      <TripSteps steps={trip.steps ?? mockSteps} />
+      <TripSteps
+        steps={trip.steps}
+        trip={trip}
+        navigation={navigation}
+      />
     </View>
   )
 }
 
 interface Props {
   trip: Trip
+  navigation: any
 }
 
 const wrapperStyles: ViewStyle = {}

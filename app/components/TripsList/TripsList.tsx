@@ -14,6 +14,7 @@ const formatTrips = (trips: TripDTO[]): Trip[] => {
     ...trip,
     startDate: new Date(trip.startDate),
     endDate: new Date(trip.endDate),
+    steps: JSON.parse(trip.steps)
   }))
 
   return formattedTrips

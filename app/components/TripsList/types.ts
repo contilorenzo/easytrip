@@ -1,4 +1,4 @@
-import { TripStep } from "../TripDetails/TripSteps/types"
+import { TripStep } from '../TripDetails/TripSteps/types'
 
 export interface Trip {
   id: number
@@ -6,7 +6,7 @@ export interface Trip {
   country: string
   startDate: Date
   endDate: Date
-  steps?: TripStep[]
+  steps?: TripStep<any>[]
 }
 
 export interface NewTrip {
@@ -22,4 +22,5 @@ export interface TripDTO {
   country: string
   startDate: string
   endDate: string
+  steps: string
 }

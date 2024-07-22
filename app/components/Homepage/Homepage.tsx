@@ -5,6 +5,9 @@ import NewTripScreen from '../../views/Homepage/NewTripScreen'
 import { t } from '../../translations'
 import { TranslationsKeys } from '../../translations/types'
 import TripDetailsScreen from '../../views/TripDetails/TripDetailsScreen'
+import WorkInProgress from '../WorkInProgress/WorkInProgress'
+import AddStepScreen from '../../views/TripDetails/AddStepScreen'
+import { ROUTES } from '../common/db/routes'
 
 const Tab = createNativeStackNavigator()
 
@@ -13,11 +16,12 @@ const Homepage = () => {
     <Tab.Navigator>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
-        name="New-trip"
+        name={ROUTES.NEW_TRIP}
         component={NewTripScreen}
         options={{ title: t(TranslationsKeys.trip_newTripPageTitle) }}
       />
-      <Tab.Screen name="Details" component={TripDetailsScreen} />
+      <Tab.Screen name={ROUTES.TRIP_DETAILS} component={TripDetailsScreen} />
+      <Tab.Screen name={ROUTES.ADD_STEP} component={AddStepScreen} />
     </Tab.Navigator>
   )
 }

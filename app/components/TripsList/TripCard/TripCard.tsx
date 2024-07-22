@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { TranslationsKeys } from '../../../translations/types'
 import { t } from '../../../translations'
+import { ROUTES } from '../../common/db/routes'
 
 const getRemainingDays = (dateUntil: Date): string => {
   const diff = Math.abs(dateUntil.getTime() - new Date().getTime())
@@ -17,7 +18,7 @@ const getRemainingDays = (dateUntil: Date): string => {
 
 const TripCard = ({ trip, navigation }: Props) => {
   const handleTripCardClick = () => {
-    navigation.navigate('Details', { trip: trip })
+    navigation.navigate(ROUTES.TRIP_DETAILS, { trip: trip })
   }
 
   return (

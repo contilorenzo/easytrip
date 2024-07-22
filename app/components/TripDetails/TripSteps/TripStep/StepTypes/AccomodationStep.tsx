@@ -1,5 +1,5 @@
 import { ViewStyle } from 'react-native'
-import { TripStep } from '../../types'
+import { AccomodationData, TripStep } from '../../types'
 import DefaultStep from './DefaultStep'
 
 const AccomodationStep = ({ step }: Props): React.ReactNode => {
@@ -7,7 +7,7 @@ const AccomodationStep = ({ step }: Props): React.ReactNode => {
 }
 
 interface Props {
-  step: TripStep
+  step: TripStep<AccomodationData>
 }
 
 const styles: ViewStyle = {

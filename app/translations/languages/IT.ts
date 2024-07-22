@@ -16,6 +16,13 @@ const IT: Translations = {
   [tk.remainingDays]: 'Tra',
   [tk.from]: 'Dal',
   [tk.to]: 'al',
+  [tk.confirm]: 'Conferma',
+  [tk.trip_addStep]: 'Aggiungi tappa',
+  [tk.trip_step_title]: 'Titolo',
+  [tk.trip_step_type]: 'Tipologia',
+  [tk.trip_step_startDateTime]: 'Data e ora inizio',
+  [tk.trip_step_endDateTime]: 'Data e ora fine',
+  [tk.trip_step_vehicle]: 'Veicolo',
 }
 
 export default IT
