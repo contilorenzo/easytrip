@@ -8,9 +8,7 @@ const DefaultStep = ({ step, overrideStyle, icon }: Props): React.ReactNode => {
   const wrapperStyles: ViewStyle = {
     alignItems: 'center',
     backgroundColor: 'lightgray',
-    borderColor: 'lightgray',
     borderRadius: 8,
-    borderWidth: 1,
     columnGap: 10,
     display: 'flex',
     flexDirection: 'row',

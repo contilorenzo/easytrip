@@ -4,11 +4,8 @@ import { format } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons'
 import TripSteps from './TripSteps/TripSteps'
 import { Trip } from '../TripsList/types'
-import { mockSteps } from '../../../mocks/steps'
 
 const TripDetails = ({ trip, navigation }: Props) => {
-  alert(JSON.stringify(trip))
-
   return (
     <View style={wrapperStyles}>
       <View style={headerStyles}>
@@ -28,11 +25,7 @@ const TripDetails = ({ trip, navigation }: Props) => {
           <Text>{format(trip.endDate, 'MMMM')}</Text>
         </View>
       </View>
-      <TripSteps
-        steps={trip.steps}
-        trip={trip}
-        navigation={navigation}
-      />
+      <TripSteps steps={trip.steps} trip={trip} navigation={navigation} />
     </View>
   )
 }

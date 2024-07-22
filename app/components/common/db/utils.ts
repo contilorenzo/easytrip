@@ -47,13 +47,11 @@ export const saveTrip = (db: SQLite.SQLiteDatabase, trip: NewTrip) => {
 
 export const addStep = async (newStep: TripStep<any>, trip: Trip) => {
   const db = getDatabase()
-  db.transaction(async (tx) => {
+  db.transaction((tx) => {
     let steps = trip.steps ?? []
     steps.push(newStep)
 
-    alert('pushing: ' + JSON.stringify(steps))
-
-    await tx.executeSql(
+    tx.executeSql(
       `UPDATE trips SET steps='${JSON.stringify(steps)}' WHERE id=${trip.id}`,
       null,
       null,
