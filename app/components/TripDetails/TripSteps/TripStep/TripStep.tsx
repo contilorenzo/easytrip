@@ -5,12 +5,13 @@ import JourneyStep from './StepTypes/JourneyStep'
 import VisitStep from './StepTypes/VisitStep'
 
 const renderComponentByStepType = (
-  step: TripStepType<any>
+  step: TripStepType<any>,
+  day: string
 ): React.ReactNode => {
   const components = {
-    [StepType.ACCOMODATION]: <AccomodationStep step={step} />,
-    [StepType.JOURNEY]: <JourneyStep step={step} />,
-    [StepType.VISIT]: <VisitStep step={step} />,
+    [StepType.ACCOMODATION]: <AccomodationStep step={step} day={day} />,
+    [StepType.JOURNEY]: <JourneyStep step={step} day={day} />,
+    [StepType.VISIT]: <VisitStep step={step} day={day} />,
   }
 
   const defaultStep = (
@@ -22,12 +23,15 @@ const renderComponentByStepType = (
   return components?.[step.type] ?? defaultStep
 }
 
-const TripStep = ({ step }: Props) => {
-  return <View style={wrapperStyles}>{renderComponentByStepType(step)}</View>
+const TripStep = ({ step, day }: Props) => {
+  return (
+    <View style={wrapperStyles}>{renderComponentByStepType(step, day)}</View>
+  )
 }
 
 interface Props {
   step: TripStepType<any>
+  day: string
 }
 
 export default TripStep

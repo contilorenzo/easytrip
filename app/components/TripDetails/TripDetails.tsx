@@ -58,9 +58,10 @@ const headerStyles: TextStyle = {
 
 const datesWrapperStyles: TextStyle = {
   alignItems: 'center',
+  columnGap: 25,
   display: 'flex',
   flexDirection: 'row',
-  justifyContent: 'space-evenly',
+  justifyContent: 'center',
   marginTop: 20,
 }
 

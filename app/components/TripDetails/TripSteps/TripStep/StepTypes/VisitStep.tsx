@@ -1,13 +1,16 @@
 import { ViewStyle } from 'react-native'
-import { TripStep } from '../../types'
+import { TripStep, VisitData } from '../../types'
 import DefaultStep from './DefaultStep'
 
-const VisitStep = ({ step }: Props): React.ReactNode => {
-  return <DefaultStep overrideStyle={styles} step={step} icon="image" />
+const VisitStep = ({ step, day }: Props): React.ReactNode => {
+  return (
+    <DefaultStep overrideStyle={styles} step={step} icon="image" day={day} />
+  )
 }
 
 interface Props {
-  step: TripStep
+  step: TripStep<VisitData>
+  day: string
 }
 
 const styles: ViewStyle = {

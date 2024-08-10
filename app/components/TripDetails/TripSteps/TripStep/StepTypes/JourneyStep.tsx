@@ -1,12 +1,16 @@
 import { ViewStyle } from 'react-native'
 import { JourneyData, TripStep, VEHICLES } from '../../types'
 import DefaultStep from './DefaultStep'
-import { Ionicons } from '@expo/vector-icons'
 import { IonIcon } from '../../../../common/types'
 
-const JourneyStep = ({ step }: Props): React.ReactNode => {
+const JourneyStep = ({ step, day }: Props): React.ReactNode => {
   return (
-    <DefaultStep overrideStyle={styles} step={step} icon={getStepIcon(step)} />
+    <DefaultStep
+      overrideStyle={styles}
+      step={step}
+      icon={getStepIcon(step)}
+      day={day}
+    />
   )
 }
 
@@ -26,6 +30,7 @@ const getStepIcon = (step: TripStep<JourneyData>) => {
 
 interface Props {
   step: TripStep<JourneyData>
+  day: string
 }
 
 const styles: ViewStyle = {

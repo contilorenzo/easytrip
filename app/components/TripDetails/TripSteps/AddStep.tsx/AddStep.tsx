@@ -20,7 +20,8 @@ import { addHours, roundToNearestMinutes } from 'date-fns'
 import RadioField from '../../../FormElements/RadioField'
 
 const AddStep = ({ trip, navigation }: Props) => {
-  const isFormValid = true
+  const isFormValid = () =>
+    title !== '' && !!type && !!startDateTime && !!endDateTime
 
   const [title, setTitle] = useState('')
   const [type, setType] = useState(StepType.JOURNEY)
@@ -80,9 +81,10 @@ const AddStep = ({ trip, navigation }: Props) => {
           minuteInterval={10}
         />
       </View>
+      <Text>{title}</Text>
       <TouchableOpacity
         onPress={addNewStep}
-        disabled={!isFormValid}
+        disabled={!isFormValid()}
         style={{ ...primaryCtaStyles.button, marginTop: 10 }}
       >
         <Text style={primaryCtaStyles.text}>{t(TranslationsKeys.confirm)}</Text>
