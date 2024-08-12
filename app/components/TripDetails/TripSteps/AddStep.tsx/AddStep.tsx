@@ -5,7 +5,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
-import { StepType, TripStep } from '../types'
+import { StepType, TripStep, VEHICLES } from '../types'
 import { Ionicons } from '@expo/vector-icons'
 import { Trip } from '../../../TripsList/types'
 import { primaryCtaStyles } from '../../../common/db/styles/buttons'
@@ -16,22 +16,34 @@ import TextField from '../../../FormElements/TextField'
 import DateTimeField from '../../../FormElements/DateTimeField'
 import { useState } from 'react'
 import { addStep } from '../../../common/db/utils'
-import { addHours, roundToNearestMinutes } from 'date-fns'
+import { addHours, isSameDay, roundToNearestMinutes } from 'date-fns'
 import RadioField from '../../../FormElements/RadioField'
 
-const AddStep = ({ trip, navigation }: Props) => {
+const AddStep = ({ trip, navigation, day }: Props) => {
   const isFormValid = () =>
     title !== '' && !!type && !!startDateTime && !!endDateTime
 
   const [title, setTitle] = useState('')
   const [type, setType] = useState(StepType.JOURNEY)
+  const [vehicle, setVehicle] = useState(VEHICLES.CAR)
 
-  const roundedDateTime = roundToNearestMinutes(new Date(trip.startDate), {
-    nearestTo: 10,
-  })
-  const [startDateTime, setStartDateTime] = useState(roundedDateTime)
-  const [endDateTime, setEndDateTime] = useState(addHours(roundedDateTime, 1))
-  const [extraData, setExtraData] = useState({})
+  const roundedDateTime = () => {
+    let date: Date = new Date(day ?? trip.startDate)
+
+    if (Array.isArray(trip.steps) && trip.steps.length > 0) {
+      const lastStep: TripStep<any> = trip.steps[trip.steps.length - 1]
+
+      if (isSameDay(new Date(lastStep.endDateTime), new Date(day))) {
+        date = new Date(lastStep.endDateTime)
+      }
+    }
+
+    return roundToNearestMinutes(date, {
+      nearestTo: 10,
+    })
+  }
+  const [startDateTime, setStartDateTime] = useState(roundedDateTime())
+  const [endDateTime, setEndDateTime] = useState(addHours(roundedDateTime(), 1))
 
   const addNewStep = async () => {
     const stepData: TripStep<any> = {
@@ -39,7 +51,9 @@ const AddStep = ({ trip, navigation }: Props) => {
       type,
       startDateTime: startDateTime.toISOString(),
       endDateTime: endDateTime.toISOString(),
-      extraData,
+      extraData: {
+        ...(type === StepType.JOURNEY && { vehicle }),
+      },
     }
 
     await addStep(stepData, trip)
@@ -66,6 +80,17 @@ const AddStep = ({ trip, navigation }: Props) => {
             label: type,
           }))}
         />
+        {type === StepType.JOURNEY && (
+          <RadioField
+            label={t(TranslationsKeys.trip_step_vehicle)}
+            value={vehicle}
+            onChange={(vehicle) => setVehicle(vehicle as VEHICLES)}
+            options={Object.values(VEHICLES).map((vehicle) => ({
+              value: vehicle,
+              label: vehicle,
+            }))}
+          />
+        )}
         <DateTimeField
           label={t(TranslationsKeys.trip_step_startDateTime)}
           mode="datetime"
@@ -81,7 +106,6 @@ const AddStep = ({ trip, navigation }: Props) => {
           minuteInterval={10}
         />
       </View>
-      <Text>{title}</Text>
       <TouchableOpacity
         onPress={addNewStep}
         disabled={!isFormValid()}
@@ -97,6 +121,7 @@ const AddStep = ({ trip, navigation }: Props) => {
 interface Props {
   trip: Trip
   navigation: any
+  day: string
 }
 
 export default AddStep
