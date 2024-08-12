@@ -34,11 +34,11 @@ export const createTripsTable = (db: SQLite.SQLiteDatabase) => {
 export const saveTrip = (db: SQLite.SQLiteDatabase, trip: NewTrip) => {
   db.transaction((tx) => {
     tx.executeSql(
-      `insert into trips (city, country, startDate, endDate) values ('${trip.city}', '${trip.country}', '${trip.startDate}', '${trip.endDate}')`,
+      `insert into trips (city, country, startDate, endDate, steps) values ('${trip.city}', '${trip.country}', '${trip.startDate}', '${trip.endDate}', '[]')`,
       null,
       null,
       (_, error) => {
-        console.log(error)
+        console.error(error)
         return true
       }
     )
@@ -56,9 +56,20 @@ export const addStep = async (newStep: TripStep<any>, trip: Trip) => {
       null,
       null,
       (_, error) => {
-        console.log(error)
+        console.error(error)
         return true
       }
     )
   })
 }
+
+const deleteDB = async () => {
+  const db = getDatabase()
+  db.transaction((tx) => {
+    tx.executeSql(`DROP TABLE IF EXISTS trips`, null, null, (_, error) => {
+      console.error(error)
+      return true
+    })
+  })
+}
+ 

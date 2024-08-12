@@ -19,7 +19,13 @@ const DaySteps = ({ day, steps, navigation, trip }: Props) => {
     navigation.navigate(ROUTES.ADD_STEP, { trip, day })
   }
 
-  const renderAddStepButton = () => (
+  const renderAddStepButton = ({
+    hasLabel = true,
+    iconSize,
+  }: {
+    hasLabel?: boolean
+    iconSize?: number
+  }) => (
     <TouchableOpacity
       onPress={() => handleAddStepClick(day)}
       style={{
@@ -27,36 +33,72 @@ const DaySteps = ({ day, steps, navigation, trip }: Props) => {
         ...(steps.length > 0 && { borderWidth: 0, minHeight: 0 }),
       }}
     >
-      <Ionicons name="add-circle" style={addStepIconStyle} />
-      <Text style={addStepLabelStyle}>{t(TranslationsKeys.trip_addStep)}</Text>
+      <Ionicons
+        name="add-circle"
+        style={{ ...addStepIconStyle, ...(iconSize && { fontSize: iconSize }) }}
+      />
+      {hasLabel && (
+        <Text style={addStepLabelStyle}>
+          {t(TranslationsKeys.trip_addStep)}
+        </Text>
+      )}
     </TouchableOpacity>
   )
 
-  const continuesNextDay = () => {
-    if (Array.isArray(trip.steps) && trip.steps.length > 0) {
-      const lastStep: TripStepType<any> = trip.steps[trip.steps.length - 1]
-      const startDate = new Date(lastStep.startDateTime)
-      const endDate = new Date(lastStep.endDateTime)
+  enum ButtonPos {
+    LEFT,
+    BOTTOM,
+    TOP,
+  }
 
-      if (isSameDay(new Date(day), endDate)) return false
-      return isAfter(endDate, startDate)
+  const getAddStepPosition = () => {
+    if (Array.isArray(steps) && steps.length > 0) {
+      const lastStep: TripStepType<any> = steps[steps.length - 1]
+      const lastStartDate = new Date(lastStep.startDateTime)
+      const lastEndDate = new Date(lastStep.endDateTime)
+
+      const firstStep: TripStepType<any> = steps[0]
+      const firstStartDate = new Date(firstStep.startDateTime)
+
+      const currentDay = new Date(day)
+
+      const continuesNextDay =
+        !isSameDay(lastEndDate, lastStartDate) &&
+        !isSameDay(lastEndDate, currentDay) &&
+        isAfter(lastEndDate, currentDay)
+
+      const followsPreviousDay =
+        !isSameDay(lastEndDate, lastStartDate) &&
+        isAfter(currentDay, firstStartDate)
+
+      if (continuesNextDay && followsPreviousDay) return ButtonPos.LEFT
+      if (continuesNextDay) return ButtonPos.TOP
+      if (followsPreviousDay) return ButtonPos.BOTTOM
     }
 
-    return false
+    return ButtonPos.BOTTOM
   }
 
   return (
     <View style={wrapperStyles}>
-      <View style={dayStyles}>
-        <Text style={{ fontWeight: 'bold' }}>{formatDate(day, 'EEE')}</Text>
-        <Text>{formatDate(day, 'dd/MM')}</Text>
+      <View style={dayColumnStyles}>
+        <View style={dayStyles}>
+          <Text style={{ fontWeight: 'bold' }}>{formatDate(day, 'EEE')}</Text>
+          <Text>{formatDate(day, 'dd/MM')}</Text>
+        </View>
+        {getAddStepPosition() === ButtonPos.LEFT &&
+          renderAddStepButton({ hasLabel: false, iconSize: 24 })}
       </View>
       <View style={stepsColumnStyles}>
-        {continuesNextDay() && renderAddStepButton()}
+        {getAddStepPosition() === ButtonPos.TOP && renderAddStepButton({})}
         {steps.map((step) => (
-          <TripStep step={step} key={step.title} day={day} />
+          <TripStep
+            step={step}
+            key={step.title + '_' + step.startDateTime}
+            day={day}
+          />
         ))}
-        {!continuesNextDay() && renderAddStepButton()}
+        {getAddStepPosition() === ButtonPos.BOTTOM && renderAddStepButton({})}
       </View>
     </View>
   )
@@ -83,14 +125,21 @@ const wrapperStyles: ViewStyle = {
   paddingBottom: 8,
 }
 
-const dayStyles: ViewStyle = {
+const dayColumnStyles: ViewStyle = {
   alignItems: 'center',
   display: 'flex',
+  gap: 6,
   justifyContent: 'center',
   padding: 4,
   width: '16%',
   borderRightColor: 'lightgray',
   borderRightWidth: 4,
+}
+
+const dayStyles: ViewStyle = {
+  alignItems: 'center',
+  display: 'flex',
+  justifyContent: 'center',
 }
 
 const stepsColumnStyles: ViewStyle = {

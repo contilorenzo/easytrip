@@ -10,9 +10,9 @@ const DefaultStep = ({
   icon,
   day,
 }: Props): React.ReactNode => {
-  const currentDay = new Date(day).getDay()
-  const firstDay = new Date(step.startDateTime).getDay()
-  const lastDay = new Date(step.endDateTime).getDay()
+  const currentDay = new Date(day).setHours(0,0,0,0)
+  const firstDay = new Date(step.startDateTime).setHours(0,0,0,0)
+  const lastDay = new Date(step.endDateTime).setHours(0,0,0,0)
 
   const followsPreviousDay = () => {
     if (isAfter(currentDay, firstDay) && !isEqual(lastDay, firstDay)) {
@@ -49,25 +49,32 @@ const DefaultStep = ({
     columnGap: 10,
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-start',
     padding: 12,
     width: '100%',
   }
 
+  const contentTextStyles: TextStyle = {
+    fontWeight: 'bold',
+    width: '84%',
+  }
+
   const divForPreviousDayStyles: ViewStyle = {
     backgroundColor: overrideStyle?.backgroundColor ?? 'transparent',
-    height: 8,
+    borderRadius: 9999,
+    height: 12,
     opacity: 0.6,
     position: 'absolute',
-    top: -12,
-    width: '90%',
+    top: -20,
+    width: 30,
     zIndex: 2,
   }
 
   const hoursStyle: ViewStyle = {
     display: 'flex',
     justifyContent: 'space-between',
-    paddingBottom: 3,
-    paddingTop: 3,
+    paddingBottom: 5,
+    paddingTop: 5,
   }
 
   const timestampStyle: TextStyle = {
@@ -81,7 +88,7 @@ const DefaultStep = ({
         {followsPreviousDay() && <View style={divForPreviousDayStyles} />}
         <View style={contentStyles}>
           {icon && <Ionicons name={icon} size={20} />}
-          <Text style={{ fontWeight: 'bold' }}>{step.title}</Text>
+          <Text style={contentTextStyles}>{step.title}</Text>
         </View>
       </View>
       <View style={hoursStyle}>

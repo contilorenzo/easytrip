@@ -1,7 +1,7 @@
 import { View, ViewStyle } from 'react-native'
 import { TripStep as TripStepType } from '../TripSteps/types'
 import { Trip } from '../../TripsList/types'
-import { eachDayOfInterval, format, interval } from 'date-fns'
+import { eachDayOfInterval, format, interval, isAfter } from 'date-fns'
 import DaySteps from './DaySteps/DaySteps'
 
 const TripSteps = ({ steps, navigation, trip }: Props) => {
@@ -20,10 +20,13 @@ const TripSteps = ({ steps, navigation, trip }: Props) => {
       const startDay = formatDay(new Date(step.startDateTime))
       const endDay = formatDay(new Date(step.endDateTime))
 
-      stepsByDay[startDay] = [...stepsByDay?.[startDay], step]
-      if (startDay === endDay) return
+      const stepDays = eachDayOfInterval(interval(startDay, endDay)).map(
+        (date) => formatDay(date)
+      )
 
-      stepsByDay[endDay] = [...stepsByDay?.[endDay], step]
+      stepDays.forEach((day) => {
+        stepsByDay[day] = [...stepsByDay?.[day], step]
+      })
     })
 
     return stepsByDay
@@ -41,20 +44,17 @@ const TripSteps = ({ steps, navigation, trip }: Props) => {
             steps={steps}
             navigation={navigation}
             trip={trip}
+            key={day}
           />
         ))}
       </>
     )
   }
 
-  return (
-    <View style={wrapperStyles}>
-      {steps && steps.length > 0 && renderSteps()}
-    </View>
-  )
+  return <View style={wrapperStyles}>{renderSteps()}</View>
 }
 
-const formatDay = (date) => format(date, 'EEEE - dd MMMM yyyy')
+const formatDay = (date: Date) => format(date, 'EEEE - dd MMMM yyyy')
 
 interface Props {
   steps: TripStepType<any>[]
@@ -69,5 +69,5 @@ const wrapperStyles: ViewStyle = {
   display: 'flex',
   flexDirection: 'column',
   marginTop: 20,
-  rowGap: 8,
+  rowGap: 20,
 }

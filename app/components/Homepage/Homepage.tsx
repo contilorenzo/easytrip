@@ -5,7 +5,6 @@ import NewTripScreen from '../../views/Homepage/NewTripScreen'
 import { t } from '../../translations'
 import { TranslationsKeys } from '../../translations/types'
 import TripDetailsScreen from '../../views/TripDetails/TripDetailsScreen'
-import WorkInProgress from '../WorkInProgress/WorkInProgress'
 import AddStepScreen from '../../views/TripDetails/AddStepScreen'
 import { ROUTES } from '../common/db/routes'
 

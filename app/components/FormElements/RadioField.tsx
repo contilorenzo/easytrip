@@ -34,6 +34,7 @@ const RadioField = ({
             <TouchableOpacity
               style={{ ...optionStyles, ...getSelectedStyles(option).view }}
               onPress={() => onChange(option.value)}
+              key={option.value}
             >
               <Text
                 numberOfLines={1}
