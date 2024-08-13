@@ -1,10 +1,13 @@
 import { View, ViewStyle } from 'react-native'
 import { TripStep as TripStepType } from '../TripSteps/types'
 import { Trip } from '../../TripsList/types'
-import { eachDayOfInterval, format, interval, isAfter } from 'date-fns'
+import { eachDayOfInterval, format, interval } from 'date-fns'
 import DaySteps from './DaySteps/DaySteps'
+import { useTripsContext } from '../../../state/TripsContext'
 
-const TripSteps = ({ steps, navigation, trip }: Props) => {
+const TripSteps = ({ steps, navigation }: Props) => {
+  const trip = useTripsContext().currentTrip
+
   const getStepsByDay = (): { [key: string]: TripStepType<any>[] } => {
     const stepsByDay = {}
 
@@ -39,13 +42,7 @@ const TripSteps = ({ steps, navigation, trip }: Props) => {
     return (
       <>
         {stepsByDay.map(([day, steps]) => (
-          <DaySteps
-            day={day}
-            steps={steps}
-            navigation={navigation}
-            trip={trip}
-            key={day}
-          />
+          <DaySteps day={day} steps={steps} navigation={navigation} key={day} />
         ))}
       </>
     )
@@ -58,7 +55,6 @@ const formatDay = (date: Date) => format(date, 'EEEE - dd MMMM yyyy')
 
 interface Props {
   steps: TripStepType<any>[]
-  trip: Trip
   navigation: any
 }
 

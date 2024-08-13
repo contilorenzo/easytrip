@@ -3,10 +3,12 @@ import { ViewStyle, View, TextStyle, Text } from 'react-native'
 import { format } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons'
 import TripSteps from './TripSteps/TripSteps'
-import { Trip } from '../TripsList/types'
+import { useTripsContext } from '../../state/TripsContext'
 
-const TripDetails = ({ trip, navigation }: Props) => {
-  return (
+const TripDetails = ({ navigation }: Props) => {
+  const trip = useTripsContext().currentTrip
+
+  return trip ? (
     <View style={wrapperStyles}>
       <View style={headerStyles}>
         <Text style={cityTextStyles}>{trip.city}</Text>
@@ -25,13 +27,14 @@ const TripDetails = ({ trip, navigation }: Props) => {
           <Text>{format(trip.endDate, 'MMMM')}</Text>
         </View>
       </View>
-      <TripSteps steps={trip.steps} trip={trip} navigation={navigation} />
+      <TripSteps steps={trip.steps} navigation={navigation} />
     </View>
+  ) : (
+    <></>
   )
 }
 
 interface Props {
-  trip: Trip
   navigation: any
 }
 

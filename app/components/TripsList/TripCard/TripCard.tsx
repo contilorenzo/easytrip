@@ -10,6 +10,7 @@ import {
 import { TranslationsKeys } from '../../../translations/types'
 import { t } from '../../../translations'
 import { ROUTES } from '../../common/db/routes'
+import { useTripsContext } from '../../../state/TripsContext'
 
 const getRemainingDays = (dateUntil: Date): string => {
   const diff = Math.abs(dateUntil.getTime() - new Date().getTime())
@@ -17,8 +18,11 @@ const getRemainingDays = (dateUntil: Date): string => {
 }
 
 const TripCard = ({ trip, navigation }: Props) => {
+  const context = useTripsContext()
+
   const handleTripCardClick = () => {
-    navigation.navigate(ROUTES.TRIP_DETAILS, { trip: trip })
+    context.setCurrentTrip(trip)
+    navigation.navigate(ROUTES.TRIP_DETAILS)
   }
 
   return (

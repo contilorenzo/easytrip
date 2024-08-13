@@ -1,25 +1,28 @@
-import { Trip } from '../app/components/TripsList/types'
+import { TripDTO } from '../app/components/TripsList/types'
 
-export const mockTrips: Trip[] = [
+export const mockTrips: TripDTO[] = [
   {
     id: 1,
     city: 'Paris',
     country: 'France',
-    startDate: new Date('2024-05-01'),
-    endDate: new Date('2024-05-05'),
+    startDate: '2024-05-01',
+    endDate: '2024-05-05',
+    steps: '[]',
   },
   {
     id: 2,
     city: 'Tokyo',
     country: 'Japan',
-    startDate: new Date('2024-06-10'),
-    endDate: new Date('2024-06-15'),
+    startDate: '2024-06-10',
+    endDate: '2024-06-15',
+    steps: '[]',
   },
   {
     id: 3,
     city: 'New York City',
     country: 'USA',
-    startDate: new Date('2024-07-20'),
-    endDate: new Date('2024-07-25'),
+    startDate: '2024-07-20',
+    endDate: '2024-07-25',
+    steps: '[]',
   },
 ]

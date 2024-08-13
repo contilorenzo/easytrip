@@ -19,8 +19,16 @@ const Homepage = () => {
         component={NewTripScreen}
         options={{ title: t(TranslationsKeys.trip_newTripPageTitle) }}
       />
-      <Tab.Screen name={ROUTES.TRIP_DETAILS} component={TripDetailsScreen} />
-      <Tab.Screen name={ROUTES.ADD_STEP} component={AddStepScreen} />
+      <Tab.Screen
+        name={ROUTES.TRIP_DETAILS}
+        component={TripDetailsScreen}
+        options={{ title: t(TranslationsKeys.trip_tripDetails) }}
+      />
+      <Tab.Screen
+        name={ROUTES.ADD_STEP}
+        component={AddStepScreen}
+        options={{ title: t(TranslationsKeys.trip_addStep) }}
+      />
     </Tab.Navigator>
   )
 }

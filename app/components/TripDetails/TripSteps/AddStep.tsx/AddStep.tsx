@@ -7,7 +7,6 @@ import {
 } from 'react-native'
 import { StepType, TripStep, VEHICLES } from '../types'
 import { Ionicons } from '@expo/vector-icons'
-import { Trip } from '../../../TripsList/types'
 import { primaryCtaStyles } from '../../../common/db/styles/buttons'
 import { t } from '../../../../translations'
 import { TranslationsKeys } from '../../../../translations/types'
@@ -18,8 +17,11 @@ import { useState } from 'react'
 import { addStep } from '../../../common/db/utils'
 import { addHours, isSameDay, roundToNearestMinutes } from 'date-fns'
 import RadioField from '../../../FormElements/RadioField'
+import { useTripsContext } from '../../../../state/TripsContext'
 
-const AddStep = ({ trip, navigation, day }: Props) => {
+const AddStep = ({ navigation, day }: Props) => {
+  const trip = useTripsContext().currentTrip
+
   const isFormValid = () =>
     title !== '' && !!type && !!startDateTime && !!endDateTime
 
@@ -45,6 +47,8 @@ const AddStep = ({ trip, navigation, day }: Props) => {
   const [startDateTime, setStartDateTime] = useState(roundedDateTime())
   const [endDateTime, setEndDateTime] = useState(addHours(roundedDateTime(), 1))
 
+  const context = useTripsContext()
+
   const addNewStep = async () => {
     const stepData: TripStep<any> = {
       title,
@@ -56,8 +60,8 @@ const AddStep = ({ trip, navigation, day }: Props) => {
       },
     }
 
-    await addStep(stepData, trip)
-    navigation.navigate(ROUTES.TRIP_DETAILS, { trip })
+    await addStep(stepData, context)
+    navigation.navigate(ROUTES.TRIP_DETAILS)
   }
 
   return (
@@ -119,7 +123,6 @@ const AddStep = ({ trip, navigation, day }: Props) => {
 }
 
 interface Props {
-  trip: Trip
   navigation: any
   day: string
 }

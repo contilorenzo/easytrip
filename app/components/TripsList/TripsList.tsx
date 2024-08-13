@@ -1,64 +1,41 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Text, TextStyle, View, ViewStyle, Platform } from 'react-native'
 import TripCard from './TripCard/TripCard'
 import { t } from '../../translations'
 import { TranslationsKeys } from '../../translations/types'
-import * as SQLite from 'expo-sqlite'
-import { createTripsTable, getDatabase } from '../common/db/utils'
-import { Trip, TripDTO } from './types'
+import { createTripsTable, formatTrips, loadTrips } from '../common/db/utils'
+import { Trip } from './types'
 import { useFocusEffect } from '@react-navigation/native'
 import { mockTrips } from '../../../mocks/trips'
-import { TripStep } from '../TripDetails/TripSteps/types'
-import { isAfter } from 'date-fns'
-
-const formatTrips = (trips: TripDTO[]): Trip[] => {
-  const formattedTrips = trips.map((trip) => ({
-    ...trip,
-    startDate: new Date(trip.startDate),
-    endDate: new Date(trip.endDate),
-    steps: sortByStartTime(JSON.parse(trip.steps)),
-  }))
-
-  return formattedTrips
-}
-
-const sortByStartTime = (steps: TripStep<any>[]) => {
-  const detachedSteps = [...steps]
-
-  detachedSteps.sort((a, b) => {
-    var dateA = new Date(a.startDateTime)
-    var dateB = new Date(b.startDateTime)
-    return isAfter(dateA, dateB) ? 1 : -1
-  })
-
-  return detachedSteps
-}
+import { useTripsContext } from '../../state/TripsContext'
 
 const TripsList = ({ navigation }: Props) => {
-  const [trips, setTrips] = useState<Trip[]>([])
-  const db = getDatabase()
+  const context = useTripsContext()
 
   useFocusEffect(() => {
-    if (Platform.OS !== 'web') {
-      createTripsTable(db as SQLite.SQLiteDatabase)
+    context.setCurrentTrip(null)
 
-      db.transaction((tx) => {
-        tx.executeSql(
-          `select * from trips`,
-          undefined,
-          (_, { rows: { _array } }) => setTrips(formatTrips(_array))
-        )
-      })
-    } else setTrips(mockTrips)
+    if (context.trips.length === 0) {
+      if (Platform.OS !== 'web') {
+        createTripsTable()
+        loadTrips(context)
+      } else {
+        context.setTrips(formatTrips(mockTrips))
+      }
+    }
   })
 
   return (
-    <View style={wrapperStyles}>
-      <Text style={textStyles}>{t(TranslationsKeys.yourTrips)}</Text>
-      {trips.map((trip) => (
-        <TripCard trip={trip} key={trip.id} navigation={navigation} />
-      ))}
-    </View>
+    <>
+      {context.trips.length > 0 && (
+        <View style={wrapperStyles}>
+          <Text style={textStyles}>{t(TranslationsKeys.yourTrips)}</Text>
+          {context.trips.map((trip: Trip) => (
+            <TripCard trip={trip} key={trip.id} navigation={navigation} />
+          ))}
+        </View>
+      )}
+    </>
   )
 }
 

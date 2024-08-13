@@ -12,11 +12,11 @@ import { t } from '../../../../translations'
 import { TranslationsKeys } from '../../../../translations/types'
 import { Ionicons } from '@expo/vector-icons'
 import { ROUTES } from '../../../common/db/routes'
-import { Trip } from '../../../TripsList/types'
+import { useTripsContext } from '../../../../state/TripsContext'
 
-const DaySteps = ({ day, steps, navigation, trip }: Props) => {
+const DaySteps = ({ day, steps, navigation }: Props) => {
   const handleAddStepClick = (day: string) => {
-    navigation.navigate(ROUTES.ADD_STEP, { trip, day })
+    navigation.navigate(ROUTES.ADD_STEP, { day })
   }
 
   const renderAddStepButton = ({
@@ -44,12 +44,6 @@ const DaySteps = ({ day, steps, navigation, trip }: Props) => {
       )}
     </TouchableOpacity>
   )
-
-  enum ButtonPos {
-    LEFT,
-    BOTTOM,
-    TOP,
-  }
 
   const getAddStepPosition = () => {
     if (Array.isArray(steps) && steps.length > 0) {
@@ -79,6 +73,8 @@ const DaySteps = ({ day, steps, navigation, trip }: Props) => {
     return ButtonPos.BOTTOM
   }
 
+  const { currentTrip } = useTripsContext()
+
   return (
     <View style={wrapperStyles}>
       <View style={dayColumnStyles}>
@@ -104,6 +100,12 @@ const DaySteps = ({ day, steps, navigation, trip }: Props) => {
   )
 }
 
+enum ButtonPos {
+  LEFT,
+  BOTTOM,
+  TOP,
+}
+
 const formatDate = (dayString: string, stringFormat: string) => {
   return format(new Date(dayString), stringFormat)
 }
@@ -114,7 +116,6 @@ interface Props {
   day: string
   steps: TripStepType<any>[]
   navigation: any
-  trip: Trip
 }
 
 const wrapperStyles: ViewStyle = {

@@ -6,8 +6,8 @@ import DateTimeField from '../FormElements/DateTimeField'
 import { useState } from 'react'
 import { NewTrip } from '../TripsList/types'
 import { Button } from 'react-native'
-import { getDatabase, saveTrip } from '../common/db/utils'
-import * as SQLite from 'expo-sqlite'
+import { addTrip } from '../common/db/utils'
+import { useTripsContext } from '../../state/TripsContext'
 
 const today = new Date()
 const oneWeekFromToday = new Date(Date.now() + 604800000)
@@ -18,7 +18,13 @@ const NewTripForm = ({ navigation }) => {
   const [startDate, setStartDate] = useState<Date>(today)
   const [endDate, setEndDate] = useState<Date>(oneWeekFromToday)
 
+  const context = useTripsContext()
+
   const isFormValid = !!country && !!city && !!startDate && !!endDate
+
+  const createTrip = (trip: NewTrip) => {
+    addTrip(trip, context)
+  }
 
   return (
     <View style={wrapperStyles}>
@@ -57,12 +63,6 @@ const NewTripForm = ({ navigation }) => {
       />
     </View>
   )
-}
-
-const createTrip = (trip: NewTrip) => {
-  const db = getDatabase()
-
-  saveTrip(db as SQLite.SQLiteDatabase, trip)
 }
 
 const wrapperStyles: ViewStyle = {
