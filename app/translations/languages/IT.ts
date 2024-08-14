@@ -12,13 +12,14 @@ const IT: Translations = {
   [tk.trip_endDate]: 'Data fine',
   [tk.trip_addTrip]: 'Aggiungi viaggio',
   [tk.trip_newTripPageTitle]: 'Nuovo viaggio',
-  [tk.trip_tripDetails]: 'Dettagli viaggio',
+  [tk.trip_tripDetails]: 'Dettagli',
   [tk.trip_removeConfirmTitle]: 'Elimina viaggio',
   [tk.trip_removeConfirmDescription]:
     "Confermi di voler eliminare l'intero viaggio?",
+  [tk.trip_tripTo]: 'Viaggio:',
   [tk.day]: 'giorno',
   [tk.days]: 'giorni',
-  [tk.remainingDays]: 'Tra',
+  [tk.remainingDays]: 'tra',
   [tk.from]: 'Dal',
   [tk.to]: 'al',
   [tk.confirm]: 'Conferma',
@@ -34,6 +35,16 @@ const IT: Translations = {
     'Confermi di voler eliminare la tappa?',
   [tk.noResults]: 'Nessun risultato',
   [tk.trip_searchCountry]: 'Seleziona paese',
+  [tk.vehicle_bus]: 'Bus',
+  [tk.vehicle_plane]: 'Aereo',
+  [tk.vehicle_train]: 'Treno',
+  [tk.vehicle_feet]: 'A piedi',
+  [tk.vehicle_car]: 'Auto',
+  [tk.vehicle_boat]: 'Nave',
+  [tk.step_type_accomodation]: 'Alloggio',
+  [tk.step_type_journey]: 'Viaggio',
+  [tk.step_type_visit]: 'Visita',
+  [tk.step_type_food]: 'Cibo',
 }
 
 export default IT

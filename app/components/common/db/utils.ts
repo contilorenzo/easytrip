@@ -57,7 +57,7 @@ export const formatTrips = (trips: TripDTO[]): Trip[] => {
     country: JSON.parse(trip.country),
   }))
 
-  return formattedTrips
+  return sortTripsByDate(formattedTrips)
 }
 
 const sortStepsByStartTime = (steps: TripStep<any>[]) => {
@@ -70,6 +70,18 @@ const sortStepsByStartTime = (steps: TripStep<any>[]) => {
   })
 
   return detachedSteps
+}
+
+const sortTripsByDate = (trips: Trip[]) => {
+  const detachedTrips = [...trips]
+
+  detachedTrips.sort((a, b) => {
+    var dateA = new Date(a.startDate)
+    var dateB = new Date(b.startDate)
+    return isAfter(dateA, dateB) ? 1 : -1
+  })
+
+  return detachedTrips
 }
 
 export const addTrip = (trip: NewTrip, context: TripsContextState) => {

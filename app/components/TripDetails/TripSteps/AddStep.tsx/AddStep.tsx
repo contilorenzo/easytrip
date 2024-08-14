@@ -13,11 +13,19 @@ import { TranslationsKeys } from '../../../../translations/types'
 import { ROUTES } from '../../../common/db/routes'
 import TextField from '../../../FormElements/TextField'
 import DateTimeField from '../../../FormElements/DateTimeField'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { addStep } from '../../../common/db/utils'
-import { addHours, isSameDay, roundToNearestMinutes } from 'date-fns'
+import {
+  addHours,
+  addMinutes,
+  isAfter,
+  isSameDay,
+  roundToNearestMinutes,
+} from 'date-fns'
 import RadioField from '../../../FormElements/RadioField'
 import { useTripsContext } from '../../../../state/TripsContext'
+import { getVehicleIcon } from '../TripStep/StepTypes/JourneyStep'
+import { getStepTypeIcon } from '../TripStep/StepTypes/DefaultStep'
 
 const AddStep = ({ navigation, day }: Props) => {
   const trip = useTripsContext().currentTrip
@@ -64,10 +72,16 @@ const AddStep = ({ navigation, day }: Props) => {
     navigation.navigate(ROUTES.TRIP_DETAILS)
   }
 
+  useEffect(() => {
+    if (isAfter(startDateTime, endDateTime))
+      setEndDateTime(addHours(startDateTime, 1))
+  }, [startDateTime])
+
   return (
     <View style={wrapperStyles}>
       <Text style={headerTextStyles}>
-        Trip to <Text style={{ fontWeight: 'bold' }}>{trip.city}</Text>
+        {t(TranslationsKeys.trip_tripTo)}{' '}
+        <Text style={{ fontWeight: 'bold' }}>{trip.city}</Text>
       </Text>
       <View style={formStyles}>
         <TextField
@@ -81,7 +95,8 @@ const AddStep = ({ navigation, day }: Props) => {
           onChange={(type) => setType(type as StepType)}
           options={Object.values(StepType).map((type) => ({
             value: type,
-            label: type,
+            label: t(TranslationsKeys[`step_type_${type}`]),
+            icon: getStepTypeIcon(type),
           }))}
         />
         {type === StepType.JOURNEY && (
@@ -91,7 +106,8 @@ const AddStep = ({ navigation, day }: Props) => {
             onChange={(vehicle) => setVehicle(vehicle as VEHICLES)}
             options={Object.values(VEHICLES).map((vehicle) => ({
               value: vehicle,
-              label: vehicle,
+              label: t(TranslationsKeys[`vehicle_${vehicle}`]),
+              icon: getVehicleIcon(vehicle),
             }))}
           />
         )}
@@ -108,15 +124,16 @@ const AddStep = ({ navigation, day }: Props) => {
           value={endDateTime}
           onChange={setEndDateTime}
           minuteInterval={10}
+          minDate={addMinutes(startDateTime, 10)}
         />
       </View>
       <TouchableOpacity
         onPress={addNewStep}
         disabled={!isFormValid()}
-        style={{ ...primaryCtaStyles.button, marginTop: 10 }}
+        style={{ ...primaryCtaStyles.button, marginTop: 30 }}
       >
         <Text style={primaryCtaStyles.text}>{t(TranslationsKeys.confirm)}</Text>
-        <Ionicons name="add-circle" style={primaryCtaStyles.icon} />
+        <Ionicons name="save" style={primaryCtaStyles.icon} />
       </TouchableOpacity>
     </View>
   )
@@ -136,12 +153,13 @@ const wrapperStyles: ViewStyle = {
 const formStyles: ViewStyle = {
   display: 'flex',
   flexDirection: 'column',
-  rowGap: 10,
+  rowGap: 20,
 }
 
 const headerTextStyles: TextStyle = {
-  marginBottom: 10,
   fontSize: 20,
+  marginBottom: 40,
+  marginTop: 40,
   textAlign: 'center',
   width: '100%',
 }

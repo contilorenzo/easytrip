@@ -3,6 +3,7 @@ import { StepType, TripStep as TripStepType } from '../types'
 import AccomodationStep from './StepTypes/AccomodationStep'
 import JourneyStep from './StepTypes/JourneyStep'
 import VisitStep from './StepTypes/VisitStep'
+import DefaultStep from './StepTypes/DefaultStep'
 
 const renderComponentByStepType = (
   step: TripStepType<any>,
@@ -14,11 +15,7 @@ const renderComponentByStepType = (
     [StepType.VISIT]: <VisitStep step={step} day={day} />,
   }
 
-  const defaultStep = (
-    <View>
-      <Text>{step.type}</Text>
-    </View>
-  )
+  const defaultStep = <DefaultStep step={step} day={day} />
 
   return components?.[step.type] ?? defaultStep
 }

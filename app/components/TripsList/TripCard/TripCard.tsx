@@ -12,6 +12,8 @@ import { t } from '../../../translations'
 import { ROUTES } from '../../common/db/routes'
 import { useTripsContext } from '../../../state/TripsContext'
 import CountryFlag from '../../common/CountryFlag/CountryFlag'
+import { format } from 'date-fns'
+import { it } from 'date-fns/locale'
 
 const getRemainingDays = (dateUntil: Date): string => {
   const diff = Math.abs(dateUntil.getTime() - new Date().getTime())
@@ -39,14 +41,21 @@ const TripCard = ({ trip, navigation }: Props) => {
         </View>
 
         <View style={rightColumnStyles}>
-          <Text>{t(TranslationsKeys.remainingDays)}</Text>
-          <Text style={remainingDaysStyles}>
-            {getRemainingDays(trip.startDate) +
-              ' ' +
-              (+getRemainingDays(trip.startDate) === 1
-                ? t(TranslationsKeys.day)
-                : t(TranslationsKeys.days))}
+          <Text style={{ color: 'rgba(0,0,0,0.3)', letterSpacing: 0.02 }}>
+            {format(trip.startDate, 'dd MMM yyyy', { locale: it })}
           </Text>
+          <View style={remainingDaysContainerStyles}>
+            <Text style={{ marginBottom: 1 }}>
+              {t(TranslationsKeys.remainingDays)}
+            </Text>
+            <Text style={remainingDaysStyles}>
+              {getRemainingDays(trip.startDate) +
+                ' ' +
+                (+getRemainingDays(trip.startDate) === 1
+                  ? t(TranslationsKeys.day)
+                  : t(TranslationsKeys.days))}
+            </Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -61,7 +70,7 @@ interface Props {
 const wrapperStyles: ViewStyle = {
   backgroundColor: 'white',
   borderRadius: 10,
-  height: 80,
+  height: 78,
   padding: 12,
   shadowColor: '#000',
   shadowOffset: {
@@ -75,7 +84,7 @@ const wrapperStyles: ViewStyle = {
 }
 
 const gridStyles: ViewStyle = {
-  flexDirection: 'row',
+  flexDirection: 'column',
   gap: 5,
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -83,15 +92,15 @@ const gridStyles: ViewStyle = {
 }
 
 const cityNameStyles: TextStyle = {
-  color: 'rgba(0,0,0,0.7)',
-  fontSize: 26,
+  color: 'rgba(0,0,0,0.6)',
+  fontSize: 24,
   fontWeight: '800',
   textTransform: 'capitalize',
-  width: 230,
+  width: 310,
 }
 
 const leftColumnStyles: ViewStyle = {
-  height: '100%',
+  width: '100%',
 }
 
 const destinationStyles: ViewStyle = {
@@ -103,8 +112,16 @@ const destinationStyles: ViewStyle = {
 
 const rightColumnStyles: ViewStyle = {
   alignItems: 'flex-end',
-  height: '100%',
-  justifyContent: 'flex-end',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  padding: 0,
+  width: '100%',
+}
+
+const remainingDaysContainerStyles: ViewStyle = {
+  alignItems: 'flex-end',
+  columnGap: 4,
+  flexDirection: 'row',
 }
 
 const remainingDaysStyles: TextStyle = {

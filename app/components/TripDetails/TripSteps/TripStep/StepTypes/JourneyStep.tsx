@@ -8,21 +8,20 @@ const JourneyStep = ({ step, day }: Props): React.ReactNode => {
     <DefaultStep
       overrideStyle={styles}
       step={step}
-      icon={getStepIcon(step)}
+      icon={getVehicleIcon(step.extraData.vehicle)}
       day={day}
     />
   )
 }
 
-const getStepIcon = (step: TripStep<JourneyData>) => {
-  const vehicle = step.extraData.vehicle
-
+export const getVehicleIcon = (vehicle: VEHICLES) => {
   const icons = {
     [VEHICLES.PLANE]: 'airplane',
     [VEHICLES.CAR]: 'car',
     [VEHICLES.BUS]: 'bus',
     [VEHICLES.FEET]: 'walk',
     [VEHICLES.TRAIN]: 'train',
+    [VEHICLES.BOAT]: 'boat',
   }
 
   return (icons[vehicle] ?? 'car') as IonIcon

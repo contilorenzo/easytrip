@@ -6,12 +6,13 @@ import TripSteps from './TripSteps/TripSteps'
 import { useTripsContext } from '../../state/TripsContext'
 import CountryFlag from '../common/CountryFlag/CountryFlag'
 import { useFocusEffect } from '@react-navigation/native'
+import { it } from 'date-fns/locale'
 
 const TripDetails = ({ navigation }: Props) => {
   const trip = useTripsContext().currentTrip
 
   useFocusEffect(() => {
-    if(!trip?.id) navigation.goBack()
+    if (!trip?.id) navigation.goBack()
   })
 
   return trip ? (
@@ -25,15 +26,15 @@ const TripDetails = ({ navigation }: Props) => {
       </View>
       <View style={datesWrapperStyles}>
         <View style={dateStyles}>
-          <Text>{format(trip.startDate, 'dd')}</Text>
-          <Text>{format(trip.startDate, 'MMMM')}</Text>
+          <Text>{format(trip.startDate, 'dd', { locale: it })}</Text>
+          <Text>{format(trip.startDate, 'MMMM', { locale: it })}</Text>
         </View>
         <View>
           <Ionicons name="arrow-forward" style={iconStyles} size={20} />
         </View>
         <View style={dateStyles}>
-          <Text>{format(trip.endDate, 'dd')}</Text>
-          <Text>{format(trip.endDate, 'MMMM')}</Text>
+          <Text>{format(trip.endDate, 'dd', { locale: it })}</Text>
+          <Text>{format(trip.endDate, 'MMMM', { locale: it })}</Text>
         </View>
       </View>
       <TripSteps steps={trip.steps} navigation={navigation} />
@@ -55,7 +56,7 @@ const countryStyles: ViewStyle = {
   columnGap: 6,
   display: 'flex',
   flexDirection: 'row',
-  marginTop: 2,
+  marginTop: 3,
 }
 
 const countryTextStyles: TextStyle = {
@@ -66,6 +67,7 @@ const countryTextStyles: TextStyle = {
 const cityTextStyles: TextStyle = {
   fontSize: 26,
   fontWeight: '800',
+  textAlign: 'center',
   textTransform: 'uppercase',
 }
 

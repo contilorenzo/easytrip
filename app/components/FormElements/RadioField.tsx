@@ -6,6 +6,7 @@ import {
   TextStyle,
 } from 'react-native'
 import { Option } from '../common/types'
+import { Ionicons } from '@expo/vector-icons'
 
 const RadioField = ({
   label,
@@ -26,7 +27,7 @@ const RadioField = ({
 
   return (
     <View style={wrapperStyles}>
-      {label && <Text>{label}</Text>}
+      {label && <Text style={{ fontWeight: '800' }}>{label}</Text>}
       <View style={selectStyles}>
         {Array.isArray(options) &&
           options.length > 0 &&
@@ -36,6 +37,13 @@ const RadioField = ({
               onPress={() => onChange(option.value)}
               key={option.value}
             >
+              {option?.icon && (
+                <Ionicons
+                  name={option.icon}
+                  size={20}
+                  style={{ ...textStyles, ...getSelectedStyles(option).text }}
+                />
+              )}
               <Text
                 numberOfLines={1}
                 style={{ ...textStyles, ...getSelectedStyles(option).text }}
@@ -74,6 +82,7 @@ const optionStyles: ViewStyle = {
 }
 
 const textStyles: TextStyle = {
+  color: 'rgba(0,0,0,0.7)',
   fontWeight: 'bold',
 }
 

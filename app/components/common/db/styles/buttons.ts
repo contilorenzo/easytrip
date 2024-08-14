@@ -32,5 +32,6 @@ export const primaryCtaStyles: CtaStyles = {
   icon: {
     color: 'white',
     display: 'flex',
+    fontSize: 20,
   },
 }

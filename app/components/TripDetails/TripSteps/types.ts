@@ -1,13 +1,14 @@
 export enum StepType {
-  ACCOMODATION = 'ACCOMODATION',
-  JOURNEY = 'JOURNEY',
-  VISIT = 'VISIT',
+  ACCOMODATION = 'accomodation',
+  JOURNEY = 'journey',
+  VISIT = 'visit',
+  FOOD = 'food',
 }
 
 export interface Link {
-    url: string
-    label: string
-    newTab?: boolean
+  url: string
+  label: string
+  newTab?: boolean
 }
 
 export interface TripStep<T> {
@@ -37,4 +38,5 @@ export enum VEHICLES {
   BUS = 'bus',
   TRAIN = 'train',
   FEET = 'feet',
+  BOAT = 'boat',
 }

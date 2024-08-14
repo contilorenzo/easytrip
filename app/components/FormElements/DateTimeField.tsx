@@ -8,6 +8,7 @@ const DateTimeField = ({
   mode = 'date',
   onChange,
   minuteInterval,
+  minDate
 }: Props) => {
   const [date, setDate] = useState(new Date())
 
@@ -26,6 +27,7 @@ const DateTimeField = ({
         mode={mode}
         onChange={handleDateChange}
         minuteInterval={minuteInterval ?? 1}
+        minimumDate={minDate}
       />
     </View>
   )
@@ -46,4 +48,5 @@ interface Props {
   mode?: 'date' | 'time' | 'datetime'
   onChange?: (date: Date) => void
   minuteInterval?: number
+  minDate?: Date
 }

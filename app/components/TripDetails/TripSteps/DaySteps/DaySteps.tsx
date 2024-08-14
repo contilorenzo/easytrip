@@ -13,6 +13,7 @@ import { TranslationsKeys } from '../../../../translations/types'
 import { Ionicons } from '@expo/vector-icons'
 import { ROUTES } from '../../../common/db/routes'
 import { useTripsContext } from '../../../../state/TripsContext'
+import { it } from 'date-fns/locale'
 
 const DaySteps = ({ day, steps, navigation }: Props) => {
   const handleAddStepClick = (day: string) => {
@@ -107,7 +108,7 @@ enum ButtonPos {
 }
 
 const formatDate = (dayString: string, stringFormat: string) => {
-  return format(new Date(dayString), stringFormat)
+  return format(new Date(dayString), stringFormat, { locale: it })
 }
 
 export default DaySteps

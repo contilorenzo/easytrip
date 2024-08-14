@@ -1,5 +1,5 @@
 import { Text, TextStyle, View, ViewStyle } from 'react-native'
-import { TripStep } from '../../types'
+import { StepType, TripStep } from '../../types'
 import { Ionicons } from '@expo/vector-icons'
 import { IonIcon } from '../../../../common/types'
 import { format, isAfter, isBefore, isEqual } from 'date-fns'
@@ -41,8 +41,9 @@ const DefaultStep = ({
 
   const boxStyles: ViewStyle = {
     alignItems: 'center',
-    backgroundColor: 'lightgray',
+    borderColor: 'lightgray',
     borderRadius: 4,
+    borderWidth: 1,
     overflow: 'visible',
     position: 'relative',
     width: '84%',
@@ -115,7 +116,7 @@ const DefaultStep = ({
       <View style={boxStyles}>
         {followsPreviousDay() && <View style={divForPreviousDayStyles} />}
         <View style={contentStyles}>
-          {icon && <Ionicons name={icon} size={20} />}
+          <Ionicons name={icon ?? getStepTypeIcon(step.type)} size={20} />
           <Text style={contentTextStyles}>{step.title}</Text>
           <Text>
             <Ionicons
@@ -138,6 +139,17 @@ const DefaultStep = ({
       </View>
     </View>
   )
+}
+
+export const getStepTypeIcon = (stepType: StepType) => {
+  const icons = {
+    [StepType.ACCOMODATION]: 'bed',
+    [StepType.JOURNEY]: 'map',
+    [StepType.FOOD]: 'pizza',
+    [StepType.VISIT]: 'images',
+  }
+
+  return (icons[stepType] ?? 'calendar') as IonIcon
 }
 
 interface Props {
