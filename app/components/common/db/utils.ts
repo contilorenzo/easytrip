@@ -4,6 +4,9 @@ import { NewTrip, Trip, TripDTO } from '../../TripsList/types'
 import { TripStep } from '../../TripDetails/TripSteps/types'
 import { isAfter } from 'date-fns'
 import { TripsContextState } from '../../../state'
+import { Popup } from 'react-native-popup-confirm-toast'
+import { TranslationsKeys } from '../../../translations/types'
+import { t } from '../../../translations'
 
 export const getDatabase = () => {
   if (Platform.OS === 'web') {
@@ -85,6 +88,41 @@ export const addTrip = (trip: NewTrip, context: TripsContextState) => {
         return true
       }
     )
+  })
+}
+
+export const removeTrip = (tripId: number, context: TripsContextState) => {
+  const db = getDatabase()
+
+  Popup.show({
+    // @ts-ignore
+    type: 'confirm',
+    title: t(TranslationsKeys.trip_removeConfirmTitle),
+    textBody: t(TranslationsKeys.trip_removeConfirmDescription),
+    buttonText: t(TranslationsKeys.confirm),
+    confirmText: t(TranslationsKeys.cancel),
+    bounciness: 5,
+    startDuration: 100,
+    hiddenDuration: 100,
+    callback: () => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          `DELETE FROM trips WHERE id=${tripId}`,
+          null,
+          () => {
+            loadTrips(context)
+          },
+          (_, error) => {
+            console.error(error)
+            return true
+          }
+        )
+      })
+      Popup.hide()
+    },
+    cancelCallback: () => {
+      Popup.hide()
+    },
   })
 }
 

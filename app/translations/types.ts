@@ -1,4 +1,5 @@
 export enum TranslationsKeys {
+  appName,
   addNewTrip,
   addFirstTrip,
   yourTrips,
@@ -10,6 +11,8 @@ export enum TranslationsKeys {
   trip_newTripPageTitle,
   trip_addStep,
   trip_tripDetails,
+  trip_removeConfirmTitle,
+  trip_removeConfirmDescription,
   trip_step_title,
   trip_step_type,
   trip_step_vehicle,

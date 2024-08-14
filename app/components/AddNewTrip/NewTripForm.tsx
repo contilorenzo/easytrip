@@ -1,4 +1,4 @@
-import { Text, View, ViewStyle } from 'react-native'
+import { Text, View, ViewStyle, TouchableOpacity } from 'react-native'
 import { t } from '../../translations'
 import { TranslationsKeys } from '../../translations/types'
 import TextField from '../FormElements/TextField'
@@ -10,6 +10,8 @@ import { addTrip } from '../common/db/utils'
 import { useTripsContext } from '../../state/TripsContext'
 import DropdownField from '../FormElements/DropdownField'
 import { AutocompleteDropdownItem } from 'react-native-autocomplete-dropdown'
+import { primaryCtaStyles } from '../common/db/styles/buttons'
+import { Ionicons } from '@expo/vector-icons'
 
 const today = new Date()
 const oneWeekFromToday = new Date(Date.now() + 604800000)
@@ -56,7 +58,8 @@ const NewTripForm = ({ navigation }) => {
         value={endDate}
         onChange={setEndDate}
       />
-      <Button
+      <TouchableOpacity
+        style={{ ...primaryCtaStyles.button, marginTop: 20 }}
         onPress={() => {
           createTrip({
             country,
@@ -67,8 +70,12 @@ const NewTripForm = ({ navigation }) => {
           navigation.goBack()
         }}
         disabled={!isFormValid}
-        title={t(TranslationsKeys.trip_addTrip)}
-      />
+      >
+        <Text style={primaryCtaStyles.text}>
+          {t(TranslationsKeys.trip_addTrip)}
+        </Text>
+        <Ionicons name="save" style={primaryCtaStyles.icon} size={20} />
+      </TouchableOpacity>
     </View>
   ) : (
     <></>

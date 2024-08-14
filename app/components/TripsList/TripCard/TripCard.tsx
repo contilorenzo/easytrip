@@ -61,7 +61,7 @@ interface Props {
 const wrapperStyles: ViewStyle = {
   backgroundColor: 'white',
   borderRadius: 10,
-  height: 76,
+  height: 80,
   padding: 12,
   shadowColor: '#000',
   shadowOffset: {

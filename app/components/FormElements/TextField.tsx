@@ -3,7 +3,7 @@ import { ViewStyle, TextInput, Text, View } from 'react-native'
 const TextField = ({ label, value, onChange = defaultOnChange }: Props) => {
   return (
     <View style={wrapperStyles}>
-      {label && <Text>{label}</Text>}
+      {label && <Text style={{ fontWeight: '800' }}>{label}</Text>}
       <TextInput
         style={inputStyles}
         onChangeText={onChange}

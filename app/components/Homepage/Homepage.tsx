@@ -7,13 +7,22 @@ import { TranslationsKeys } from '../../translations/types'
 import TripDetailsScreen from '../../views/TripDetails/TripDetailsScreen'
 import AddStepScreen from '../../views/TripDetails/AddStepScreen'
 import { ROUTES } from '../common/db/routes'
+import { TouchableOpacity } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
+import { useTripsContext } from '../../state/TripsContext'
+import { removeTrip } from '../common/db/utils'
 
 const Tab = createNativeStackNavigator()
 
 const Homepage = () => {
+  const context = useTripsContext()
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ title: t(TranslationsKeys.appName) }}
+      />
       <Tab.Screen
         name={ROUTES.NEW_TRIP}
         component={NewTripScreen}
@@ -22,7 +31,16 @@ const Homepage = () => {
       <Tab.Screen
         name={ROUTES.TRIP_DETAILS}
         component={TripDetailsScreen}
-        options={{ title: t(TranslationsKeys.trip_tripDetails) }}
+        options={{
+          title: t(TranslationsKeys.trip_tripDetails),
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => removeTrip(context.currentTrip.id, context)}
+            >
+              <Ionicons name="trash-outline" size={20} />
+            </TouchableOpacity>
+          ),
+        }}
       />
       <Tab.Screen
         name={ROUTES.ADD_STEP}

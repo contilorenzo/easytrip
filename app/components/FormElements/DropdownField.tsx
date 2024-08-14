@@ -13,7 +13,7 @@ const DropdownField = ({
 }: Props) => {
   return (
     <View style={wrapperStyles}>
-      {label && <Text>{label}</Text>}
+      {label && <Text style={{ fontWeight: '800' }}>{label}</Text>}
       <AutocompleteDropdown
         onSelectItem={onChange}
         dataSet={options}

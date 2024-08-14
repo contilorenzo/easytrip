@@ -4,11 +4,15 @@ import { format } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons'
 import TripSteps from './TripSteps/TripSteps'
 import { useTripsContext } from '../../state/TripsContext'
-import { Image } from 'react-native'
 import CountryFlag from '../common/CountryFlag/CountryFlag'
+import { useFocusEffect } from '@react-navigation/native'
 
 const TripDetails = ({ navigation }: Props) => {
   const trip = useTripsContext().currentTrip
+
+  useFocusEffect(() => {
+    if(!trip?.id) navigation.goBack()
+  })
 
   return trip ? (
     <View style={wrapperStyles}>

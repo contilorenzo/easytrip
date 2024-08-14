@@ -10,21 +10,23 @@ export const primaryCtaStyles: CtaStyles = {
   button: {
     borderRadius: 10,
     backgroundColor: 'tomato',
-    padding: 10,
+    padding: 14,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    shadowColor: 'lightgray',
+    shadowColor: '#000',
     shadowOffset: {
-      width: 3,
-      height: 3,
+      width: 0,
+      height: 4,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   text: {
     color: 'white',
     display: 'flex',
+    fontSize: 16,
     fontWeight: '800',
   },
   icon: {
