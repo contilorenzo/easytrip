@@ -18,7 +18,7 @@ const AddNewTripButton = ({ isFirstTrip, navigation }: Props) => {
             : TranslationsKeys.addNewTrip
         )}
       </Text>
-      <Ionicons name="add" style={primaryCtaStyles.icon} size={20} />
+      <Ionicons name="add-circle" style={primaryCtaStyles.icon} size={20} />
     </TouchableOpacity>
   )
 }

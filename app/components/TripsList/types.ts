@@ -1,9 +1,10 @@
+import { AutocompleteDropdownItem } from 'react-native-autocomplete-dropdown'
 import { TripStep } from '../TripDetails/TripSteps/types'
 
 export interface Trip {
   id: number
   city: string
-  country: string
+  country: AutocompleteDropdownItem
   startDate: Date
   endDate: Date
   steps?: TripStep<any>[]

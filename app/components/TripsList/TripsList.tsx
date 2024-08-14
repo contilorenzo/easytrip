@@ -30,9 +30,11 @@ const TripsList = ({ navigation }: Props) => {
       {context.trips.length > 0 && (
         <View style={wrapperStyles}>
           <Text style={textStyles}>{t(TranslationsKeys.yourTrips)}</Text>
-          {context.trips.map((trip: Trip) => (
-            <TripCard trip={trip} key={trip.id} navigation={navigation} />
-          ))}
+          <View style={tripsListStyles}>
+            {context.trips.map((trip: Trip) => (
+              <TripCard trip={trip} key={trip.id} navigation={navigation} />
+            ))}
+          </View>
         </View>
       )}
     </>
@@ -44,14 +46,22 @@ interface Props {
 }
 
 const wrapperStyles: ViewStyle = {
-  gap: 5,
   alignItems: 'center',
+  paddingBottom: 20,
+  paddingTop: 24
+}
+
+const tripsListStyles: ViewStyle = {
+  gap: 10,
+  alignItems: 'center',
+  width: '100%',
 }
 
 const textStyles: TextStyle = {
   borderBottomColor: 'lightgray',
   borderBottomWidth: 1,
   color: 'darkgray',
+  fontWeight: '800',
   marginBottom: 5,
   paddingBottom: 5,
   textAlign: 'center',

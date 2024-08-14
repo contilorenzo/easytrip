@@ -25,7 +25,7 @@ export const primaryCtaStyles: CtaStyles = {
   text: {
     color: 'white',
     display: 'flex',
-    fontWeight: '600',
+    fontWeight: '800',
   },
   icon: {
     color: 'white',

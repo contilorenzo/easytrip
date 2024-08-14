@@ -9,12 +9,10 @@ LogBox.ignoreLogs([
 const Home = () => {
   return (
     <NavigationContainer independent>
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ flex: 1, padding: '10px' }}>
-            <Text>Welcome</Text>
-          </View>
-        </ScrollView>
+      <SafeAreaView>
+        <View style={{ padding: '10px' }}>
+          <Text>Welcome</Text>
+        </View>
       </SafeAreaView>
     </NavigationContainer>
   )

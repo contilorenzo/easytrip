@@ -1,12 +1,15 @@
 import { createContext, useContext, useState } from 'react'
 import { TripsContextState } from '.'
 import { Trip } from '../components/TripsList/types'
+import { AutocompleteDropdownItem } from 'react-native-autocomplete-dropdown'
 
 const initialState: TripsContextState = {
   trips: [],
   setTrips: null,
   currentTrip: null,
   setCurrentTrip: null,
+  countries: null,
+  setCountries: null,
 }
 
 const TripsContext = createContext<TripsContextState>(initialState)
@@ -14,6 +17,7 @@ const TripsContext = createContext<TripsContextState>(initialState)
 export const TripsContextProvider = ({ children }) => {
   const [trips, setTripsState] = useState([])
   const [currentTrip, setCurrentTrip] = useState<Trip>()
+  const [countries, setCountries] = useState<AutocompleteDropdownItem[]>()
 
   const setTrips = (trips: Trip[]) => {
     setTripsState(trips)
@@ -23,7 +27,14 @@ export const TripsContextProvider = ({ children }) => {
 
   return (
     <TripsContext.Provider
-      value={{ trips, setTrips, currentTrip, setCurrentTrip }}
+      value={{
+        trips,
+        setTrips,
+        currentTrip,
+        setCurrentTrip,
+        countries,
+        setCountries,
+      }}
     >
       {children}
     </TripsContext.Provider>

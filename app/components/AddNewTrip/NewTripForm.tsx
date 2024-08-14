@@ -1,4 +1,4 @@
-import { View, ViewStyle } from 'react-native'
+import { Text, View, ViewStyle } from 'react-native'
 import { t } from '../../translations'
 import { TranslationsKeys } from '../../translations/types'
 import TextField from '../FormElements/TextField'
@@ -8,17 +8,25 @@ import { NewTrip } from '../TripsList/types'
 import { Button } from 'react-native'
 import { addTrip } from '../common/db/utils'
 import { useTripsContext } from '../../state/TripsContext'
+import DropdownField from '../FormElements/DropdownField'
+import { AutocompleteDropdownItem } from 'react-native-autocomplete-dropdown'
 
 const today = new Date()
 const oneWeekFromToday = new Date(Date.now() + 604800000)
 
 const NewTripForm = ({ navigation }) => {
+  const context = useTripsContext()
+
   const [country, setCountry] = useState<string>()
   const [city, setCity] = useState<string>()
   const [startDate, setStartDate] = useState<Date>(today)
   const [endDate, setEndDate] = useState<Date>(oneWeekFromToday)
 
-  const context = useTripsContext()
+  if (!context.countries) {
+    getCountriesOptions().then((data) => {
+      context.setCountries(data)
+    })
+  }
 
   const isFormValid = !!country && !!city && !!startDate && !!endDate
 
@@ -26,12 +34,12 @@ const NewTripForm = ({ navigation }) => {
     addTrip(trip, context)
   }
 
-  return (
+  return context.countries ? (
     <View style={wrapperStyles}>
-      <TextField
+      <DropdownField
         label={t(TranslationsKeys.trip_country)}
-        value={country}
         onChange={setCountry}
+        options={context.countries}
       />
       <TextField
         label={t(TranslationsKeys.trip_city)}
@@ -62,7 +70,23 @@ const NewTripForm = ({ navigation }) => {
         title={t(TranslationsKeys.trip_addTrip)}
       />
     </View>
+  ) : (
+    <></>
   )
+}
+
+const getCountriesOptions = async () => {
+  const res = await fetch('https://flagcdn.com/it/codes.json')
+  const countriesObj = await res.json()
+
+  const countriesOptions: AutocompleteDropdownItem[] = Object.entries(
+    countriesObj
+  ).map(([key, value]) => ({
+    id: key,
+    title: value.toString() ?? '',
+  }))
+
+  return countriesOptions
 }
 
 const wrapperStyles: ViewStyle = {

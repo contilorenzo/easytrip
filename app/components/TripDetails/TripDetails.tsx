@@ -4,6 +4,8 @@ import { format } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons'
 import TripSteps from './TripSteps/TripSteps'
 import { useTripsContext } from '../../state/TripsContext'
+import { Image } from 'react-native'
+import CountryFlag from '../common/CountryFlag/CountryFlag'
 
 const TripDetails = ({ navigation }: Props) => {
   const trip = useTripsContext().currentTrip
@@ -12,7 +14,10 @@ const TripDetails = ({ navigation }: Props) => {
     <View style={wrapperStyles}>
       <View style={headerStyles}>
         <Text style={cityTextStyles}>{trip.city}</Text>
-        <Text style={countryTextStyles}>{trip.country}</Text>
+        <View style={countryStyles}>
+          <CountryFlag countryCode={trip.country.id} height={20} isCircle />
+          <Text style={countryTextStyles}>{trip.country?.title}</Text>
+        </View>
       </View>
       <View style={datesWrapperStyles}>
         <View style={dateStyles}>
@@ -38,7 +43,16 @@ interface Props {
   navigation: any
 }
 
-const wrapperStyles: ViewStyle = {}
+const wrapperStyles: ViewStyle = {
+  alignItems: 'center',
+}
+
+const countryStyles: ViewStyle = {
+  columnGap: 6,
+  display: 'flex',
+  flexDirection: 'row',
+  marginTop: 2,
+}
 
 const countryTextStyles: TextStyle = {
   color: 'grey',
@@ -47,7 +61,7 @@ const countryTextStyles: TextStyle = {
 
 const cityTextStyles: TextStyle = {
   fontSize: 26,
-  fontWeight: 'bold',
+  fontWeight: '800',
   textTransform: 'uppercase',
 }
 
@@ -66,6 +80,7 @@ const datesWrapperStyles: TextStyle = {
   flexDirection: 'row',
   justifyContent: 'center',
   marginTop: 20,
+  width: '70%',
 }
 
 const dateStyles: ViewStyle = {

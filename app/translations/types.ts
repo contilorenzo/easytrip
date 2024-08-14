@@ -17,6 +17,7 @@ export enum TranslationsKeys {
   trip_step_endDateTime,
   trip_step_removeConfirmTitle,
   trip_step_removeConfirmDescription,
+  trip_searchCountry,
   day,
   days,
   remainingDays,
@@ -24,6 +25,7 @@ export enum TranslationsKeys {
   to,
   confirm,
   cancel,
+  noResults
 }
 
 export type Translations = {

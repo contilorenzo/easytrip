@@ -5,7 +5,7 @@ const IT: Translations = {
   [tk.addFirstTrip]: 'Aggiungi il tuo primo viaggio',
   [tk.addNewTrip]: 'Aggiungi nuovo viaggio',
   [tk.yourTrips]: 'I tuoi prossimi viaggi',
-  [tk.trip_city]: 'Città',
+  [tk.trip_city]: 'Città / Luogo',
   [tk.trip_country]: 'Paese',
   [tk.trip_startDate]: 'Data inizio',
   [tk.trip_endDate]: 'Data fine',
@@ -28,6 +28,8 @@ const IT: Translations = {
   [tk.trip_step_removeConfirmTitle]: 'Elimina tappa',
   [tk.trip_step_removeConfirmDescription]:
     'Confermi di voler eliminare la tappa?',
+  [tk.noResults]: 'Nessun risultato',
+  [tk.trip_searchCountry]: 'Seleziona paese',
 }
 
 export default IT

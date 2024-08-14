@@ -50,13 +50,14 @@ export const formatTrips = (trips: TripDTO[]): Trip[] => {
     ...trip,
     startDate: new Date(trip.startDate),
     endDate: new Date(trip.endDate),
-    steps: sortByStartTime(JSON.parse(trip.steps)),
+    steps: sortStepsByStartTime(JSON.parse(trip.steps)),
+    country: JSON.parse(trip.country),
   }))
 
   return formattedTrips
 }
 
-const sortByStartTime = (steps: TripStep<any>[]) => {
+const sortStepsByStartTime = (steps: TripStep<any>[]) => {
   const detachedSteps = [...steps]
 
   detachedSteps.sort((a, b) => {
@@ -70,10 +71,11 @@ const sortByStartTime = (steps: TripStep<any>[]) => {
 
 export const addTrip = (trip: NewTrip, context: TripsContextState) => {
   const db = getDatabase()
+  const JSONCountry = JSON.stringify(trip.country)
 
   db.transaction((tx) => {
     tx.executeSql(
-      `insert into trips (city, country, startDate, endDate, steps) values ('${trip.city}', '${trip.country}', '${trip.startDate}', '${trip.endDate}', '[]')`,
+      `insert into trips (city, country, startDate, endDate, steps) values ('${trip.city}', '${JSONCountry}', '${trip.startDate}', '${trip.endDate}', '[]')`,
       null,
       () => {
         loadTrips(context)

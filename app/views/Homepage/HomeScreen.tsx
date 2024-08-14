@@ -1,13 +1,19 @@
 import AddNewTripButton from '../../components/AddNewTrip/AddNewTripButton'
 import TripsList from '../../components/TripsList/TripsList'
-import { SafeAreaView } from 'react-native'
+import { ScrollView } from 'react-native'
+import { useTripsContext } from '../../state/TripsContext'
 
 const HomeScreen = ({ navigation }) => {
+  const { trips } = useTripsContext()
+
   return (
-    <SafeAreaView style={{ flex: 1, margin: 10, gap: 20 }}>
-      <AddNewTripButton isFirstTrip={true} navigation={navigation} />
+    <ScrollView style={{ flex: 1, padding: 10 }}>
+      <AddNewTripButton
+        isFirstTrip={trips.length === 0}
+        navigation={navigation}
+      />
       <TripsList navigation={navigation} />
-    </SafeAreaView>
+    </ScrollView>
   )
 }
 

@@ -11,6 +11,7 @@ import { TranslationsKeys } from '../../../translations/types'
 import { t } from '../../../translations'
 import { ROUTES } from '../../common/db/routes'
 import { useTripsContext } from '../../../state/TripsContext'
+import CountryFlag from '../../common/CountryFlag/CountryFlag'
 
 const getRemainingDays = (dateUntil: Date): string => {
   const diff = Math.abs(dateUntil.getTime() - new Date().getTime())
@@ -28,8 +29,16 @@ const TripCard = ({ trip, navigation }: Props) => {
   return (
     <TouchableOpacity style={wrapperStyles} onPress={handleTripCardClick}>
       <View style={gridStyles}>
-        <Text style={cityNameStyles}>{trip.city}</Text>
-        <View style={{ alignItems: 'flex-end' }}>
+        <View style={leftColumnStyles}>
+          <View style={destinationStyles}>
+            <CountryFlag countryCode={trip.country.id} height={24} isCircle />
+            <Text style={cityNameStyles} numberOfLines={1} ellipsizeMode="tail">
+              {trip.city}
+            </Text>
+          </View>
+        </View>
+
+        <View style={rightColumnStyles}>
           <Text>{t(TranslationsKeys.remainingDays)}</Text>
           <Text style={remainingDaysStyles}>
             {getRemainingDays(trip.startDate) +
@@ -50,9 +59,18 @@ interface Props {
 }
 
 const wrapperStyles: ViewStyle = {
+  backgroundColor: 'white',
   borderRadius: 10,
-  padding: 10,
-  backgroundColor: 'lightgray',
+  height: 76,
+  padding: 12,
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 4,
+  },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  elevation: 10,
   width: '100%',
 }
 
@@ -61,18 +79,38 @@ const gridStyles: ViewStyle = {
   gap: 5,
   justifyContent: 'space-between',
   alignItems: 'center',
+  height: '100%',
 }
 
 const cityNameStyles: TextStyle = {
-  fontSize: 20,
-  fontWeight: '600',
+  color: 'rgba(0,0,0,0.7)',
+  fontSize: 26,
+  fontWeight: '800',
   textTransform: 'capitalize',
+  width: 230,
+}
+
+const leftColumnStyles: ViewStyle = {
+  height: '100%',
+}
+
+const destinationStyles: ViewStyle = {
+  alignItems: 'center',
+  columnGap: 10,
+  display: 'flex',
+  flexDirection: 'row',
+}
+
+const rightColumnStyles: ViewStyle = {
+  alignItems: 'flex-end',
+  height: '100%',
+  justifyContent: 'flex-end',
 }
 
 const remainingDaysStyles: TextStyle = {
-  fontSize: 16,
-  fontWeight: '600',
-  textAlign: 'right',
+  color: 'tomato',
+  fontSize: 18,
+  fontWeight: '800',
 }
 
 export default TripCard
