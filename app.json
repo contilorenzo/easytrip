@@ -8,6 +8,20 @@
       "expo-router"
     ],
     "name": "easytrip",
-    "slug": "easytrip"
+    "slug": "easytrip",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5dc4dd27-efbe-48b8-b6a9-95c01bf0cd03"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.contilorenzo.easytrip"
+    },
+    "android": {
+      "package": "com.contilorenzo.easytrip"
+    }
   }
 }

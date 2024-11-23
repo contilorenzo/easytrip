@@ -27,7 +27,7 @@ import { useTripsContext } from '../../../../state/TripsContext'
 import { getVehicleIcon } from '../TripStep/StepTypes/JourneyStep'
 import { getStepTypeIcon } from '../TripStep/StepTypes/DefaultStep'
 
-const AddStep = ({ navigation, day }: Props) => {
+const AddStep = ({ navigation, day, start, end }: Props) => {
   const trip = useTripsContext().currentTrip
 
   const isFormValid = () =>
@@ -52,8 +52,10 @@ const AddStep = ({ navigation, day }: Props) => {
       nearestTo: 10,
     })
   }
-  const [startDateTime, setStartDateTime] = useState(roundedDateTime())
-  const [endDateTime, setEndDateTime] = useState(addHours(roundedDateTime(), 1))
+  const [startDateTime, setStartDateTime] = useState(start ?? roundedDateTime())
+  const [endDateTime, setEndDateTime] = useState(
+    end ?? addHours(roundedDateTime(), 1)
+  )
 
   const context = useTripsContext()
 
@@ -142,6 +144,8 @@ const AddStep = ({ navigation, day }: Props) => {
 interface Props {
   navigation: any
   day: string
+  start: string
+  end: string
 }
 
 export default AddStep
