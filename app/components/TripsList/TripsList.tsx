@@ -8,6 +8,7 @@ import { Trip } from './types'
 import { useFocusEffect } from '@react-navigation/native'
 import { mockTrips } from '../../../mocks/trips'
 import { useTripsContext } from '../../state/TripsContext'
+import { isAfter, isBefore } from 'date-fns'
 
 const TripsList = ({ navigation }: Props) => {
   const context = useTripsContext()
@@ -25,14 +26,34 @@ const TripsList = ({ navigation }: Props) => {
     }
   })
 
+  const upcomingTrips = context.trips.filter((trip) =>
+    isAfter(trip.startDate, new Date())
+  )
+  const pastTrips = context.trips.filter((trip) =>
+    isBefore(trip.startDate, new Date())
+  )
+
   return (
     <>
       {context.trips.length > 0 && (
         <View style={wrapperStyles}>
-          <Text style={textStyles}>{t(TranslationsKeys.yourTrips)}</Text>
+          <Text style={textStyles}>{t(TranslationsKeys.upcomingTrips)}</Text>
           <View style={tripsListStyles}>
-            {context.trips.map((trip: Trip) => (
+            {upcomingTrips.map((trip: Trip) => (
               <TripCard trip={trip} key={trip.id} navigation={navigation} />
+            ))}
+          </View>
+          <Text style={{ ...textStyles, marginTop: 30 }}>
+            {t(TranslationsKeys.pastTrips)}
+          </Text>
+          <View style={tripsListStyles}>
+            {pastTrips.map((trip: Trip) => (
+              <TripCard
+                trip={trip}
+                key={trip.id}
+                navigation={navigation}
+                isFinished
+              />
             ))}
           </View>
         </View>
@@ -48,7 +69,7 @@ interface Props {
 const wrapperStyles: ViewStyle = {
   alignItems: 'center',
   paddingBottom: 20,
-  paddingTop: 24
+  paddingTop: 24,
 }
 
 const tripsListStyles: ViewStyle = {

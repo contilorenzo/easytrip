@@ -2,7 +2,8 @@ export enum TranslationsKeys {
   appName,
   addNewTrip,
   addFirstTrip,
-  yourTrips,
+  upcomingTrips,
+  pastTrips,
   trip_city,
   trip_country,
   trip_startDate,
@@ -25,6 +26,7 @@ export enum TranslationsKeys {
   day,
   days,
   remainingDays,
+  daysAgo,
   from,
   to,
   confirm,
@@ -39,8 +41,7 @@ export enum TranslationsKeys {
   step_type_journey,
   step_type_accomodation,
   step_type_visit,
-  step_type_food
-
+  step_type_food,
 }
 
 export type Translations = {

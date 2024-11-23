@@ -20,7 +20,7 @@ const getRemainingDays = (dateUntil: Date): string => {
   return Math.ceil(diff / (1000 * 3600 * 24)).toString()
 }
 
-const TripCard = ({ trip, navigation }: Props) => {
+const TripCard = ({ trip, navigation, isFinished = false }: Props) => {
   const context = useTripsContext()
 
   const handleTripCardClick = () => {
@@ -45,16 +45,23 @@ const TripCard = ({ trip, navigation }: Props) => {
             {format(trip.startDate, 'dd MMM yyyy', { locale: it })}
           </Text>
           <View style={remainingDaysContainerStyles}>
-            <Text style={{ marginBottom: 1 }}>
-              {t(TranslationsKeys.remainingDays)}
-            </Text>
-            <Text style={remainingDaysStyles}>
+            {!isFinished && (
+              <Text style={{ marginBottom: 1 }}>
+                {t(TranslationsKeys.remainingDays)}
+              </Text>
+            )}
+            <Text style={isFinished ? daysAgoStyles : remainingDaysStyles}>
               {getRemainingDays(trip.startDate) +
                 ' ' +
                 (+getRemainingDays(trip.startDate) === 1
                   ? t(TranslationsKeys.day)
                   : t(TranslationsKeys.days))}
             </Text>
+            {isFinished && (
+              <Text style={{ marginBottom: 1 }}>
+                {t(TranslationsKeys.daysAgo)}
+              </Text>
+            )}
           </View>
         </View>
       </View>
@@ -65,6 +72,7 @@ const TripCard = ({ trip, navigation }: Props) => {
 interface Props {
   trip: Trip
   navigation: any
+  isFinished?: boolean
 }
 
 const wrapperStyles: ViewStyle = {
@@ -126,6 +134,12 @@ const remainingDaysContainerStyles: ViewStyle = {
 
 const remainingDaysStyles: TextStyle = {
   color: 'tomato',
+  fontSize: 18,
+  fontWeight: '800',
+}
+
+const daysAgoStyles: TextStyle = {
+  color: 'grey',
   fontSize: 18,
   fontWeight: '800',
 }
