@@ -47,6 +47,8 @@ const IT: Translations = {
   [tk.step_type_journey]: 'Viaggio',
   [tk.step_type_visit]: 'Visita',
   [tk.step_type_food]: 'Cibo',
+  [tk.update]: 'Modifica',
+  [tk.delete]: 'Elimina',
 }
 
 export default IT

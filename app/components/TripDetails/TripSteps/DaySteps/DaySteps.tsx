@@ -174,16 +174,12 @@ const DaySteps = ({ day, steps, navigation }: Props) => {
       </View>
       <View style={stepsColumnStyles}>
         {steps.map((step, index) => (
-          <>
+          <View key={step.title + '_' + step.startDateTime} style={stepStyles}>
             {index === 0 &&
               renderAddStep(addMinutes(new Date(step.startDateTime), -1), day)}
-            <TripStep
-              step={step}
-              key={step.title + '_' + step.startDateTime}
-              day={day}
-            />
+            <TripStep step={step} day={day} />
             {renderAddStep(addMinutes(new Date(step.endDateTime), 1), day)}
-          </>
+          </View>
         ))}
         {steps.length === 0 &&
           renderAddStepButton({
@@ -233,10 +229,13 @@ const dayStyles: ViewStyle = {
 }
 
 const stepsColumnStyles: ViewStyle = {
-  display: 'flex',
-  gap: 7,
   height: '100%',
   width: '82%',
+}
+
+const stepStyles: ViewStyle = {
+  display: 'flex',
+  gap: 7,
 }
 
 const addStepStyles: ViewStyle = {

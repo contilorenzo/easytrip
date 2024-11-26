@@ -1,4 +1,10 @@
-import { Text, TextStyle, View, ViewStyle } from 'react-native'
+import {
+  Text,
+  TextStyle,
+  View,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native'
 import { StepType, TripStep } from '../../types'
 import { Ionicons } from '@expo/vector-icons'
 import { IonIcon } from '../../../../common/types'
@@ -8,6 +14,8 @@ import { useTripsContext } from '../../../../../state/TripsContext'
 import { Popup } from 'react-native-popup-confirm-toast'
 import { t } from '../../../../../translations'
 import { TranslationsKeys } from '../../../../../translations/types'
+import { Action } from '../../../../ActionsPopup/types'
+import { useActionsPopupContext } from '../../../../ActionsPopup/ActionsPopupProvider'
 
 const DefaultStep = ({
   step,
@@ -33,62 +41,7 @@ const DefaultStep = ({
     return false
   }
 
-  const wrapperStyles: ViewStyle = {
-    columnGap: 6,
-    display: 'flex',
-    flexDirection: 'row',
-  }
-
-  const boxStyles: ViewStyle = {
-    alignItems: 'center',
-    borderColor: 'lightgray',
-    borderRadius: 4,
-    borderWidth: 1,
-    overflow: 'visible',
-    position: 'relative',
-    width: '84%',
-    ...(overrideStyle ?? {}),
-  }
-
-  const contentStyles: ViewStyle = {
-    alignItems: 'center',
-    columnGap: 10,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    padding: 12,
-    width: '100%',
-  }
-
-  const contentTextStyles: TextStyle = {
-    fontWeight: 'bold',
-    width: '76%',
-  }
-
-  const divForPreviousDayStyles: ViewStyle = {
-    backgroundColor: overrideStyle?.backgroundColor ?? 'transparent',
-    borderRadius: 9999,
-    height: 12,
-    opacity: 0.6,
-    position: 'absolute',
-    top: -20,
-    width: 30,
-    zIndex: 2,
-  }
-
-  const hoursStyle: ViewStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingBottom: 5,
-    paddingTop: 5,
-  }
-
-  const timestampStyle: TextStyle = {
-    color: 'rgba(0, 0, 0, 0.8)',
-    fontSize: 12,
-  }
-
-  const context = useTripsContext()
+  const tripsContext = useTripsContext()
 
   const handleRemoveClick = () => {
     Popup.show({
@@ -102,7 +55,7 @@ const DefaultStep = ({
       startDuration: 100,
       hiddenDuration: 100,
       callback: () => {
-        removeStep(step, context)
+        removeStep(step, tripsContext)
         Popup.hide()
       },
       cancelCallback: () => {
@@ -111,33 +64,72 @@ const DefaultStep = ({
     })
   }
 
+  const boxStyles: ViewStyle = {
+    alignItems: 'center',
+    borderColor: 'lightgray',
+    borderRadius: 4,
+    borderWidth: 1,
+    overflow: 'visible',
+    position: 'relative',
+    width: '84%',
+    ...(overrideStyle ?? {}),
+  }
+
+  const divForPreviousDayStyles: ViewStyle = {
+    backgroundColor: overrideStyle?.backgroundColor ?? 'transparent',
+    borderRadius: 9999,
+    height: 12,
+    opacity: 0.6,
+    position: 'absolute',
+    top: -20,
+    width: 30,
+    zIndex: 2,
+  }
+
+  const actionsPopupContext = useActionsPopupContext()
+  const actions: Action[] = [
+    {
+      label: t(TranslationsKeys.update),
+      onClick: () => {
+        alert(t(TranslationsKeys.update))
+      },
+      icon: 'build',
+    },
+    {
+      label: t(TranslationsKeys.delete),
+      onClick: () => {
+        handleRemoveClick()
+      },
+      icon: 'trash-outline',
+      labelStyle: { color: 'red' },
+      iconStyle: { color: 'red' },
+    },
+  ]
+
   return (
-    <View style={wrapperStyles}>
-      <View style={boxStyles}>
-        {followsPreviousDay() && <View style={divForPreviousDayStyles} />}
-        <View style={contentStyles}>
-          <Ionicons name={icon ?? getStepTypeIcon(step.type)} size={20} />
-          <Text style={contentTextStyles}>{step.title}</Text>
-          <Text>
-            <Ionicons
-              name="close-circle"
-              size={18}
-              style={{ color: 'rgba(0,0,0,0.2)' }}
-              onPress={handleRemoveClick}
-            />
+    <>
+      <View style={wrapperStyles}>
+        <View style={boxStyles}>
+          {followsPreviousDay() && <View style={divForPreviousDayStyles} />}
+          <TouchableOpacity
+            style={contentStyles}
+            onLongPress={() => actionsPopupContext.showActions(actions)}
+          >
+            <Ionicons name={icon ?? getStepTypeIcon(step.type)} size={20} />
+            <Text style={contentTextStyles}>{step.title}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={hoursStyle}>
+          <Text style={timestampStyle}>
+            {!followsPreviousDay() &&
+              format(new Date(step.startDateTime), 'HH:mm')}
+          </Text>
+          <Text style={timestampStyle}>
+            {!continuesNextDay() && format(new Date(step.endDateTime), 'HH:mm')}
           </Text>
         </View>
       </View>
-      <View style={hoursStyle}>
-        <Text style={timestampStyle}>
-          {!followsPreviousDay() &&
-            format(new Date(step.startDateTime), 'HH:mm')}
-        </Text>
-        <Text style={timestampStyle}>
-          {!continuesNextDay() && format(new Date(step.endDateTime), 'HH:mm')}
-        </Text>
-      </View>
-    </View>
+    </>
   )
 }
 
@@ -157,6 +149,39 @@ interface Props {
   overrideStyle?: ViewStyle
   icon?: IonIcon
   day: string
+}
+
+const wrapperStyles: ViewStyle = {
+  columnGap: 6,
+  display: 'flex',
+  flexDirection: 'row',
+}
+
+const contentStyles: ViewStyle = {
+  alignItems: 'center',
+  columnGap: 10,
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  padding: 12,
+  width: '100%',
+}
+
+const contentTextStyles: TextStyle = {
+  fontWeight: 'bold',
+  width: '76%',
+}
+
+const hoursStyle: ViewStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  paddingBottom: 5,
+  paddingTop: 5,
+}
+
+const timestampStyle: TextStyle = {
+  color: 'rgba(0, 0, 0, 0.8)',
+  fontSize: 12,
 }
 
 export default DefaultStep

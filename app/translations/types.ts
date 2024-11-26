@@ -42,6 +42,8 @@ export enum TranslationsKeys {
   step_type_accomodation,
   step_type_visit,
   step_type_food,
+  update,
+  delete,
 }
 
 export type Translations = {

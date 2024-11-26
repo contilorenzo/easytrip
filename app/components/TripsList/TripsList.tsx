@@ -37,15 +37,19 @@ const TripsList = ({ navigation }: Props) => {
     <>
       {context.trips.length > 0 && (
         <View style={wrapperStyles}>
-          <Text style={textStyles}>{t(TranslationsKeys.upcomingTrips)}</Text>
+          {upcomingTrips.length > 0 && (
+            <Text style={textStyles}>{t(TranslationsKeys.upcomingTrips)}</Text>
+          )}
           <View style={tripsListStyles}>
             {upcomingTrips.map((trip: Trip) => (
               <TripCard trip={trip} key={trip.id} navigation={navigation} />
             ))}
           </View>
-          <Text style={{ ...textStyles, marginTop: 30 }}>
-            {t(TranslationsKeys.pastTrips)}
-          </Text>
+          {pastTrips.length > 0 && (
+            <Text style={{ ...textStyles, marginTop: 30 }}>
+              {t(TranslationsKeys.pastTrips)}
+            </Text>
+          )}
           <View style={tripsListStyles}>
             {pastTrips.map((trip: Trip) => (
               <TripCard

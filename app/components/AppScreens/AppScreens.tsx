@@ -35,7 +35,7 @@ const getTabBarIcon = ({ focused, color, size, route }: TabBarIcon) => {
 
 const Tab = createBottomTabNavigator()
 
-const BottomNavigation = () => {
+const AppScreens = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -61,4 +61,4 @@ const BottomNavigation = () => {
   )
 }
 
-export default BottomNavigation
+export default AppScreens
