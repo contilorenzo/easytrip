@@ -1,17 +1,17 @@
-import {
-  Text,
-  TextStyle,
-  View,
-  ViewStyle,
-  TouchableOpacity,
-} from 'react-native'
+import { Text, TextStyle, ViewStyle, TouchableOpacity } from 'react-native'
 import { Action } from './types'
 import { Ionicons } from '@expo/vector-icons'
+import { MotiView } from 'moti'
 
 const ActionsPopup = ({ actions, setShow }: Props) => {
   return (
     <TouchableOpacity style={wrapperStyles} onPressIn={() => setShow(false)}>
-      <View style={actionsListStyles}>
+      <MotiView
+        from={{ scale: 1.1, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'timing' }}
+        style={actionsListStyles}
+      >
         {actions.map((action) => (
           <TouchableOpacity
             style={{ ...actionStyles, ...action.actionStyle }}
@@ -30,7 +30,7 @@ const ActionsPopup = ({ actions, setShow }: Props) => {
             />
           </TouchableOpacity>
         ))}
-      </View>
+      </MotiView>
     </TouchableOpacity>
   )
 }

@@ -1,6 +1,8 @@
 import { View, Text, LogBox } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { NavigationContainer } from '@react-navigation/native'
+import 'react-native-reanimated'
+import 'react-native-gesture-handler'
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
