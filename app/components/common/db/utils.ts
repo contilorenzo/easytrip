@@ -163,6 +163,40 @@ export const addStep = async (
   })
 }
 
+export const updateStep = async (
+  originalStep: TripStep<any>,
+  newStep: TripStep<any>,
+  context: TripsContextState
+) => {
+  const db = getDatabase()
+  const trip = context.currentTrip
+
+  db.transaction((tx) => {
+    let steps = trip.steps ?? []
+    const filteredSteps = steps.filter(
+      (step) =>
+        step.title !== originalStep.title &&
+        step.startDateTime !== originalStep.startDateTime &&
+        step.endDateTime !== originalStep.endDateTime
+    )
+    filteredSteps.push(newStep)
+
+    tx.executeSql(
+      `UPDATE trips SET steps='${JSON.stringify(filteredSteps)}' WHERE id=${
+        trip.id
+      }`,
+      null,
+      () => {
+        loadTrips(context)
+      },
+      (_, error) => {
+        console.error(error)
+        return true
+      }
+    )
+  })
+}
+
 export const removeStep = async (
   stepToRemove: TripStep<any>,
   context: TripsContextState

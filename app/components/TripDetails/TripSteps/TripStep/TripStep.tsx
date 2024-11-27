@@ -1,4 +1,4 @@
-import { Text, View, ViewStyle } from 'react-native'
+import { View, ViewStyle } from 'react-native'
 import { StepType, TripStep as TripStepType } from '../types'
 import AccomodationStep from './StepTypes/AccomodationStep'
 import JourneyStep from './StepTypes/JourneyStep'
@@ -7,26 +7,38 @@ import DefaultStep from './StepTypes/DefaultStep'
 
 const renderComponentByStepType = (
   step: TripStepType<any>,
-  day: string
+  day: string,
+  navigation: any
 ): React.ReactNode => {
   const components = {
-    [StepType.ACCOMODATION]: <AccomodationStep step={step} day={day} />,
-    [StepType.JOURNEY]: <JourneyStep step={step} day={day} />,
-    [StepType.VISIT]: <VisitStep step={step} day={day} />,
+    [StepType.ACCOMODATION]: (
+      <AccomodationStep navigation={navigation} step={step} day={day} />
+    ),
+    [StepType.JOURNEY]: (
+      <JourneyStep navigation={navigation} step={step} day={day} />
+    ),
+    [StepType.VISIT]: (
+      <VisitStep navigation={navigation} step={step} day={day} />
+    ),
   }
 
-  const defaultStep = <DefaultStep step={step} day={day} />
+  const defaultStep = (
+    <DefaultStep navigation={navigation} step={step} day={day} />
+  )
 
   return components?.[step.type] ?? defaultStep
 }
 
-const TripStep = ({ step, day }: Props) => {
+const TripStep = ({ navigation, step, day }: Props) => {
   return (
-    <View style={wrapperStyles}>{renderComponentByStepType(step, day)}</View>
+    <View style={wrapperStyles}>
+      {renderComponentByStepType(step, day, navigation)}
+    </View>
   )
 }
 
 interface Props {
+  navigation: any
   step: TripStepType<any>
   day: string
 }

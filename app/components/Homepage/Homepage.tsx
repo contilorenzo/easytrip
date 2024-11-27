@@ -11,6 +11,7 @@ import { TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { useTripsContext } from '../../state/TripsContext'
 import { removeTrip } from '../common/db/utils'
+import UpdateStepScreen from '../../views/TripDetails/UpdateStepScreen'
 
 const Tab = createNativeStackNavigator()
 
@@ -46,6 +47,11 @@ const Homepage = () => {
         name={ROUTES.ADD_STEP}
         component={AddStepScreen}
         options={{ title: t(TranslationsKeys.trip_addStep) }}
+      />
+      <Tab.Screen
+        name={ROUTES.UPDATE_STEP}
+        component={UpdateStepScreen}
+        options={{ title: t(TranslationsKeys.trip_updateStep) }}
       />
     </Tab.Navigator>
   )

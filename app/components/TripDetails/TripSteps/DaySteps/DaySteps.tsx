@@ -43,8 +43,8 @@ const getOccupiedIntervals = (steps: TripStepType<any>[], day: string) => {
 }
 
 const DaySteps = ({ day, steps, navigation }: Props) => {
-  const handleAddStepClick = (day: string, start: Date, end: Date) => {
-    navigation.navigate(ROUTES.ADD_STEP, { day, start, end })
+  const handleAddStepClick = (start: Date, end: Date) => {
+    navigation.navigate(ROUTES.ADD_STEP, { start, end })
   }
 
   const getFreeIntervals = (occupiedIntervals: Interval[]) => {
@@ -100,7 +100,7 @@ const DaySteps = ({ day, steps, navigation }: Props) => {
   }) => {
     return (
       <TouchableOpacity
-        onPress={() => handleAddStepClick(day, start, end)}
+        onPress={() => handleAddStepClick(start, end)}
         style={{
           ...addStepStyles,
           ...(steps.length > 0 && { borderWidth: 0, minHeight: 0 }),
@@ -177,7 +177,7 @@ const DaySteps = ({ day, steps, navigation }: Props) => {
           <View key={step.title + '_' + step.startDateTime} style={stepStyles}>
             {index === 0 &&
               renderAddStep(addMinutes(new Date(step.startDateTime), -1), day)}
-            <TripStep step={step} day={day} />
+            <TripStep navigation={navigation} step={step} day={day} />
             {renderAddStep(addMinutes(new Date(step.endDateTime), 1), day)}
           </View>
         ))}
@@ -229,6 +229,7 @@ const dayStyles: ViewStyle = {
 }
 
 const stepsColumnStyles: ViewStyle = {
+  gap: 4,
   height: '100%',
   width: '82%',
 }

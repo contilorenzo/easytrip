@@ -27,6 +27,7 @@ const IT: Translations = {
   [tk.confirm]: 'Conferma',
   [tk.cancel]: 'Annulla',
   [tk.trip_addStep]: 'Aggiungi tappa',
+  [tk.trip_updateStep]: 'Modifica tappa',
   [tk.trip_step_title]: 'Titolo',
   [tk.trip_step_type]: 'Tipologia',
   [tk.trip_step_startDateTime]: 'Data e ora inizio',

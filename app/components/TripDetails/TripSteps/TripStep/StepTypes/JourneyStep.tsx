@@ -3,9 +3,10 @@ import { JourneyData, TripStep, VEHICLES } from '../../types'
 import DefaultStep from './DefaultStep'
 import { IonIcon } from '../../../../common/types'
 
-const JourneyStep = ({ step, day }: Props): React.ReactNode => {
+const JourneyStep = ({ navigation, step, day }: Props): React.ReactNode => {
   return (
     <DefaultStep
+      navigation={navigation}
       overrideStyle={styles}
       step={step}
       icon={getVehicleIcon(step.extraData.vehicle)}
@@ -28,6 +29,7 @@ export const getVehicleIcon = (vehicle: VEHICLES) => {
 }
 
 interface Props {
+  navigation: any
   step: TripStep<JourneyData>
   day: string
 }

@@ -16,8 +16,10 @@ import { t } from '../../../../../translations'
 import { TranslationsKeys } from '../../../../../translations/types'
 import { Action } from '../../../../ActionsPopup/types'
 import { useActionsPopupContext } from '../../../../ActionsPopup/ActionsPopupProvider'
+import { ROUTES } from '../../../../common/db/routes'
 
 const DefaultStep = ({
+  navigation,
   step,
   overrideStyle,
   icon,
@@ -64,6 +66,10 @@ const DefaultStep = ({
     })
   }
 
+  const handleUpdateClick = () => {
+    navigation.navigate(ROUTES.UPDATE_STEP, { stepData: step })
+  }
+
   const boxStyles: ViewStyle = {
     alignItems: 'center',
     borderColor: 'lightgray',
@@ -91,7 +97,7 @@ const DefaultStep = ({
     {
       label: t(TranslationsKeys.update),
       onClick: () => {
-        alert(t(TranslationsKeys.update))
+        handleUpdateClick()
       },
       icon: 'build',
     },
@@ -145,6 +151,7 @@ export const getStepTypeIcon = (stepType: StepType) => {
 }
 
 interface Props {
+  navigation: any
   step: TripStep<any>
   overrideStyle?: ViewStyle
   icon?: IonIcon

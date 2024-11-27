@@ -11,6 +11,7 @@ export enum TranslationsKeys {
   trip_addTrip,
   trip_newTripPageTitle,
   trip_addStep,
+  trip_updateStep,
   trip_tripDetails,
   trip_removeConfirmTitle,
   trip_removeConfirmDescription,
