@@ -229,14 +229,14 @@ const dayStyles: ViewStyle = {
 }
 
 const stepsColumnStyles: ViewStyle = {
-  gap: 4,
+  gap: 6,
   height: '100%',
   width: '82%',
 }
 
 const stepStyles: ViewStyle = {
   display: 'flex',
-  gap: 4,
+  gap: 7,
 }
 
 const addStepStyles: ViewStyle = {

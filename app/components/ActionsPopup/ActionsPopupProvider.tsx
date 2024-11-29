@@ -1,38 +1,54 @@
 import { createContext, useContext, useState } from 'react'
-import { Action } from './types'
+import { ActionsMenuConfig } from './types'
 import ActionsPopup from './ActionsPopup'
 
 export type ActionsPopupContextState = {
-  actions: Action[]
-  showActions: (actions: Action[]) => void
+  actionsMenuConfig: ActionsMenuConfig
+  showActionsMenu: (actionsMenuConfig: ActionsMenuConfig) => void
+}
+
+const emptyMenuConfig = {
+  actions: [],
 }
 
 const initialState: ActionsPopupContextState = {
-  actions: [],
-  showActions: null,
+  actionsMenuConfig: emptyMenuConfig,
+  showActionsMenu: null,
 }
 
 const ActionsPopupContext =
   createContext<ActionsPopupContextState>(initialState)
 
 export const ActionsPopupProvider = ({ children }) => {
-  const [actions, setActionsState] = useState<Action[]>([])
+  const [actionsMenuConfig, setActionsMenuConfigState] =
+    useState<ActionsMenuConfig>(emptyMenuConfig)
   const [showPopup, setShowPopup] = useState<Boolean>(false)
 
-  const showActions = (actions: Action[]) => {
-    setActionsState(actions)
+  const showActionsMenu = (config: ActionsMenuConfig) => {
+    console.log('eccomi')
+    setActionsMenuConfigState(config)
     setShowPopup(!showPopup)
+  }
+
+  const closePopup = () => {
+    setActionsMenuConfigState(emptyMenuConfig)
+    setShowPopup(false)
   }
 
   return (
     <ActionsPopupContext.Provider
       value={{
-        actions,
-        showActions,
+        actionsMenuConfig,
+        showActionsMenu,
       }}
     >
       {children}
-      {showPopup && <ActionsPopup setShow={setShowPopup} actions={actions} />}
+      {showPopup && (
+        <ActionsPopup
+          closePopup={closePopup}
+          actionsMenuConfig={actionsMenuConfig}
+        />
+      )}
     </ActionsPopupContext.Provider>
   )
 }

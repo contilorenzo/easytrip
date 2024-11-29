@@ -33,9 +33,7 @@ const IT: Translations = {
   [tk.trip_step_startDateTime]: 'Data e ora inizio',
   [tk.trip_step_endDateTime]: 'Data e ora fine',
   [tk.trip_step_vehicle]: 'Veicolo',
-  [tk.trip_step_removeConfirmTitle]: 'Elimina tappa',
-  [tk.trip_step_removeConfirmDescription]:
-    'Confermi di voler eliminare la tappa?',
+  [tk.trip_step_removeConfirmDescription]: 'Stai per eliminare:',
   [tk.noResults]: 'Nessun risultato',
   [tk.trip_searchCountry]: 'Seleziona paese',
   [tk.vehicle_bus]: 'Bus',
@@ -50,6 +48,7 @@ const IT: Translations = {
   [tk.step_type_food]: 'Cibo',
   [tk.update]: 'Modifica',
   [tk.delete]: 'Elimina',
+  [tk.warning]: 'Attenzione!',
 }
 
 export default IT

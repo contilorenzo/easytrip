@@ -9,3 +9,11 @@ export interface Action {
   actionStyle?: ViewStyle
   iconStyle?: TextStyle
 }
+
+export interface ActionsMenuConfig {
+  title?: string
+  titleStyle?: TextStyle
+  subtitle?: string
+  subtitleStyle?: TextStyle
+  actions: Action[]
+}

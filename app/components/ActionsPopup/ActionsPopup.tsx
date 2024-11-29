@@ -1,23 +1,46 @@
 import { Text, TextStyle, ViewStyle, TouchableOpacity } from 'react-native'
-import { Action } from './types'
+import { ActionsMenuConfig } from './types'
 import { Ionicons } from '@expo/vector-icons'
-import { MotiView } from 'moti'
+import { MotiView, View } from 'moti'
 
-const ActionsPopup = ({ actions, setShow }: Props) => {
+const ActionsPopup = ({ actionsMenuConfig, closePopup }: Props) => {
+  const {
+    actions,
+    title,
+    subtitle,
+    titleStyle: overrideTitleStyles,
+    subtitleStyle: overrideSubtitleStyles,
+  } = actionsMenuConfig
+
   return (
-    <TouchableOpacity style={wrapperStyles} onPressIn={() => setShow(false)}>
+    <TouchableOpacity style={wrapperStyles} onPressIn={closePopup}>
       <MotiView
         from={{ scale: 1.1, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: 'timing' }}
         style={actionsListStyles}
       >
+        {(subtitle || title) && (
+          <View style={headerStyles}>
+            {title && (
+              <Text style={{ ...titleStyles, ...overrideTitleStyles }}>
+                {title}
+              </Text>
+            )}
+            {subtitle && (
+              <Text style={{ ...subtitleStyles, ...overrideSubtitleStyles }}>
+                {subtitle}
+              </Text>
+            )}
+          </View>
+        )}
+
         {actions.map((action) => (
           <TouchableOpacity
             style={{ ...actionStyles, ...action.actionStyle }}
             key={action.label}
             onPress={() => {
-              setShow(false)
+              closePopup()
               action.onClick()
             }}
           >
@@ -36,8 +59,8 @@ const ActionsPopup = ({ actions, setShow }: Props) => {
 }
 
 interface Props {
-  actions: Action[]
-  setShow: (show: boolean) => void
+  actionsMenuConfig: ActionsMenuConfig
+  closePopup: () => void
 }
 
 export default ActionsPopup
@@ -55,6 +78,14 @@ const wrapperStyles: ViewStyle = {
   zIndex: 99999,
 }
 
+const headerStyles: ViewStyle = {
+  alignItems: 'center',
+  gap: 8,
+  paddingHorizontal: 20,
+  paddingVertical: 24,
+  width: '100%',
+}
+
 const actionsListStyles: ViewStyle = {
   backgroundColor: 'whitesmoke',
   borderRadius: 10,
@@ -64,21 +95,32 @@ const actionsListStyles: ViewStyle = {
 const actionStyles: ViewStyle = {
   alignItems: 'center',
   borderColor: 'rgba(0, 0, 0, 0.1)',
-  borderBottomWidth: 1,
+  borderTopWidth: 1,
   display: 'flex',
   flexDirection: 'row',
   gap: 8,
-  justifyContent: 'space-between',
+  justifyContent: 'center',
   paddingHorizontal: 20,
   paddingVertical: 12,
 }
 
 const labelStyles: TextStyle = {
-  fontSize: 18,
+  fontSize: 17,
   fontWeight: '400',
 }
 
 const iconStyles: TextStyle = {
-  fontSize: 18,
+  fontSize: 17,
   fontWeight: '400',
+}
+
+const titleStyles: TextStyle = {
+  fontSize: 20,
+  fontWeight: 'bold',
+  textAlign: 'center',
+}
+
+const subtitleStyles: TextStyle = {
+  fontSize: 13,
+  textAlign: 'center',
 }

@@ -11,10 +11,9 @@ import { IonIcon } from '../../../../common/types'
 import { format, isAfter, isBefore, isEqual } from 'date-fns'
 import { removeStep } from '../../../../common/db/utils'
 import { useTripsContext } from '../../../../../state/TripsContext'
-import { Popup } from 'react-native-popup-confirm-toast'
 import { t } from '../../../../../translations'
 import { TranslationsKeys } from '../../../../../translations/types'
-import { Action } from '../../../../ActionsPopup/types'
+import { ActionsMenuConfig } from '../../../../ActionsPopup/types'
 import { useActionsPopupContext } from '../../../../ActionsPopup/ActionsPopupProvider'
 import { ROUTES } from '../../../../common/db/routes'
 
@@ -46,24 +45,25 @@ const DefaultStep = ({
   const tripsContext = useTripsContext()
 
   const handleRemoveClick = () => {
-    Popup.show({
-      // @ts-ignore
-      type: 'confirm',
-      title: t(TranslationsKeys.trip_step_removeConfirmTitle),
-      textBody: t(TranslationsKeys.trip_step_removeConfirmDescription),
-      buttonText: t(TranslationsKeys.confirm),
-      confirmText: t(TranslationsKeys.cancel),
-      bounciness: 5,
-      startDuration: 100,
-      hiddenDuration: 100,
-      callback: () => {
-        removeStep(step, tripsContext)
-        Popup.hide()
-      },
-      cancelCallback: () => {
-        Popup.hide()
-      },
-    })
+    const config: ActionsMenuConfig = {
+      title: t(TranslationsKeys.warning),
+      subtitle: `${t(TranslationsKeys.trip_step_removeConfirmDescription)} '${
+        step.title
+      }'`,
+      actions: [
+        {
+          label: t(TranslationsKeys.delete),
+          onClick: () => {
+            removeStep(step, tripsContext)
+          },
+          icon: 'trash-outline',
+          labelStyle: { color: 'red' },
+          iconStyle: { color: 'red' },
+        },
+      ],
+    }
+
+    actionsPopupContext.showActionsMenu(config)
   }
 
   const handleUpdateClick = () => {
@@ -72,11 +72,18 @@ const DefaultStep = ({
 
   const boxStyles: ViewStyle = {
     alignItems: 'center',
-    borderColor: 'lightgray',
+    backgroundColor: 'whitesmoke',
     borderRadius: 4,
-    borderWidth: 1,
     overflow: 'visible',
     position: 'relative',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 1,
+    elevation: 10,
     width: '84%',
     ...(overrideStyle ?? {}),
   }
@@ -87,30 +94,37 @@ const DefaultStep = ({
     height: 12,
     opacity: 0.6,
     position: 'absolute',
-    top: -20,
+    top: -18,
     width: 30,
     zIndex: 2,
   }
 
   const actionsPopupContext = useActionsPopupContext()
-  const actions: Action[] = [
-    {
-      label: t(TranslationsKeys.update),
-      onClick: () => {
-        handleUpdateClick()
+  const actionsMenuConfig: ActionsMenuConfig = {
+    title: step.title,
+    subtitle:
+      format(step.startDateTime, 'dd/MM HH:mm') +
+      '     ' +
+      format(step.endDateTime, 'dd/MM HH:mm'),
+    actions: [
+      {
+        label: t(TranslationsKeys.update),
+        onClick: () => {
+          handleUpdateClick()
+        },
+        icon: 'build',
       },
-      icon: 'build',
-    },
-    {
-      label: t(TranslationsKeys.delete),
-      onClick: () => {
-        handleRemoveClick()
+      {
+        label: t(TranslationsKeys.delete),
+        onClick: () => {
+          handleRemoveClick()
+        },
+        icon: 'trash-outline',
+        labelStyle: { color: 'red' },
+        iconStyle: { color: 'red' },
       },
-      icon: 'trash-outline',
-      labelStyle: { color: 'red' },
-      iconStyle: { color: 'red' },
-    },
-  ]
+    ],
+  }
 
   return (
     <>
@@ -119,7 +133,9 @@ const DefaultStep = ({
           {followsPreviousDay() && <View style={divForPreviousDayStyles} />}
           <TouchableOpacity
             style={contentStyles}
-            onLongPress={() => actionsPopupContext.showActions(actions)}
+            onPress={() =>
+              actionsPopupContext.showActionsMenu(actionsMenuConfig)
+            }
           >
             <Ionicons name={icon ?? getStepTypeIcon(step.type)} size={20} />
             <Text style={contentTextStyles}>{step.title}</Text>
@@ -176,7 +192,7 @@ const contentStyles: ViewStyle = {
 
 const contentTextStyles: TextStyle = {
   fontWeight: 'bold',
-  width: '76%',
+  width: '84%',
 }
 
 const hoursStyle: ViewStyle = {

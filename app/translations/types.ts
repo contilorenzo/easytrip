@@ -20,7 +20,6 @@ export enum TranslationsKeys {
   trip_step_vehicle,
   trip_step_startDateTime,
   trip_step_endDateTime,
-  trip_step_removeConfirmTitle,
   trip_step_removeConfirmDescription,
   trip_searchCountry,
   trip_tripTo,
@@ -45,6 +44,7 @@ export enum TranslationsKeys {
   step_type_food,
   update,
   delete,
+  warning,
 }
 
 export type Translations = {
