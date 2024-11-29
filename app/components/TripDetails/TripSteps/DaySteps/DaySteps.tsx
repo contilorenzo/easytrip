@@ -103,7 +103,7 @@ const DaySteps = ({ day, steps, navigation }: Props) => {
         onPress={() => handleAddStepClick(start, end)}
         style={{
           ...addStepStyles,
-          ...(steps.length > 0 && { borderWidth: 0, minHeight: 0 }),
+          ...(steps.length > 0 && { minHeight: 0 }),
         }}
       >
         <Ionicons
@@ -236,7 +236,7 @@ const stepsColumnStyles: ViewStyle = {
 
 const stepStyles: ViewStyle = {
   display: 'flex',
-  gap: 7,
+  gap: 4,
 }
 
 const addStepStyles: ViewStyle = {
@@ -246,6 +246,7 @@ const addStepStyles: ViewStyle = {
   flexDirection: 'row',
   justifyContent: 'center',
   minHeight: 42,
+  paddingVertical: 2,
   width: '84%',
 }
 

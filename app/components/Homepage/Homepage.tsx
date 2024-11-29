@@ -36,7 +36,9 @@ const Homepage = () => {
           title: t(TranslationsKeys.trip_tripDetails),
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => removeTrip(context.currentTrip.id, context)}
+              onPress={async () => {
+                await removeTrip(context.currentTrip.id, context)
+              }}
             >
               <Ionicons name="trash-outline" size={20} />
             </TouchableOpacity>

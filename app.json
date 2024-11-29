@@ -5,7 +5,9 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-asset",
+      "expo-font"
     ],
     "name": "easytrip",
     "slug": "easytrip",
@@ -22,6 +24,7 @@
     },
     "android": {
       "package": "com.contilorenzo.easytrip"
-    }
+    },
+    "newArchEnabled": true
   }
 }

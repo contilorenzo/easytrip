@@ -13,25 +13,31 @@ import { isAfter, isBefore } from 'date-fns'
 const TripsList = ({ navigation }: Props) => {
   const context = useTripsContext()
 
-  useFocusEffect(() => {
-    context.setCurrentTrip(null)
+  useFocusEffect(
+    React.useCallback(() => {
+      context.setCurrentTrip(null)
 
-    if (context.trips.length === 0) {
-      if (Platform.OS !== 'web') {
-        createTripsTable()
-        loadTrips(context)
-      } else {
-        context.setTrips(formatTrips(mockTrips))
+      const fetchData = async () => {
+        if (context.trips.length === 0) {
+          if (Platform.OS !== 'web') {
+            await createTripsTable()
+            await loadTrips(context)
+          } else {
+            context.setTrips(formatTrips(mockTrips))
+          }
+        }
       }
-    }
-  })
+
+      fetchData()
+    }, [])
+  )
 
   const upcomingTrips = context.trips.filter((trip) =>
     isAfter(trip.startDate, new Date())
   )
-  const pastTrips = context.trips.filter((trip) =>
-    isBefore(trip.startDate, new Date())
-  )
+  const pastTrips = context.trips
+    .filter((trip) => isBefore(trip.startDate, new Date()))
+    .reverse()
 
   return (
     <>
@@ -83,8 +89,6 @@ const tripsListStyles: ViewStyle = {
 }
 
 const textStyles: TextStyle = {
-  borderBottomColor: 'lightgray',
-  borderBottomWidth: 1,
   color: 'darkgray',
   fontWeight: '800',
   marginBottom: 5,

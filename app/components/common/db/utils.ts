@@ -8,7 +8,7 @@ import { Popup } from 'react-native-popup-confirm-toast'
 import { TranslationsKeys } from '../../../translations/types'
 import { t } from '../../../translations'
 
-export const getDatabase = () => {
+export const getDatabase = async (): Promise<SQLite.SQLiteDatabase> => {
   if (Platform.OS === 'web') {
     return {
       transaction: () => {
@@ -16,36 +16,33 @@ export const getDatabase = () => {
           executeSql: () => {},
         }
       },
-    }
+    } as unknown as SQLite.SQLiteDatabase
   }
 
-  return SQLite.openDatabase('db.db')
+  return await SQLite.openDatabaseAsync('db.db')
 }
 
-export const createTripsTable = () => {
-  const db = getDatabase()
+export const createTripsTable = async () => {
+  const db = await getDatabase()
 
-  db.transaction((tx) => {
-    tx.executeSql(
-      'create table if not exists trips (id integer primary key not null, city text, country text, startDate text, endDate text, steps text);',
-      null,
-      null,
-      (_, error) => {
-        console.log(error)
-        return true
-      }
+  try {
+    await db.execAsync(
+      'create table if not exists trips (id integer primary key not null, city text, country text, startDate text, endDate text, steps text);'
     )
-  })
+  } catch (error) {
+    console.error(error)
+  }
 }
 
-export const loadTrips = (context: TripsContextState) => {
-  const db = getDatabase()
+export const loadTrips = async (context: TripsContextState) => {
+  const db = await getDatabase()
 
-  db.transaction((tx) => {
-    tx.executeSql(`select * from trips`, undefined, (_, { rows: { _array } }) =>
-      context.setTrips(formatTrips(_array))
-    )
-  })
+  try {
+    const rows: TripDTO[] = await db.getAllAsync('select * from trips')
+    context.setTrips(formatTrips(rows))
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export const formatTrips = (trips: TripDTO[]): Trip[] => {
@@ -84,27 +81,25 @@ const sortTripsByDate = (trips: Trip[]) => {
   return detachedTrips
 }
 
-export const addTrip = (trip: NewTrip, context: TripsContextState) => {
-  const db = getDatabase()
+export const addTrip = async (trip: NewTrip, context: TripsContextState) => {
+  const db = await getDatabase()
   const JSONCountry = JSON.stringify(trip.country)
 
-  db.transaction((tx) => {
-    tx.executeSql(
-      `insert into trips (city, country, startDate, endDate, steps) values ('${trip.city}', '${JSONCountry}', '${trip.startDate}', '${trip.endDate}', '[]')`,
-      null,
-      () => {
-        loadTrips(context)
-      },
-      (_, error) => {
-        console.error(error)
-        return true
-      }
+  try {
+    await db.runAsync(
+      `insert into trips (city, country, startDate, endDate, steps) values ('${trip.city}', '${JSONCountry}', '${trip.startDate}', '${trip.endDate}', '[]')`
     )
-  })
+    await loadTrips(context)
+  } catch (error) {
+    console.error(error)
+  }
 }
 
-export const removeTrip = (tripId: number, context: TripsContextState) => {
-  const db = getDatabase()
+export const removeTrip = async (
+  tripId: number,
+  context: TripsContextState
+) => {
+  const db = await getDatabase()
 
   Popup.show({
     // @ts-ignore
@@ -116,20 +111,13 @@ export const removeTrip = (tripId: number, context: TripsContextState) => {
     bounciness: 5,
     startDuration: 100,
     hiddenDuration: 100,
-    callback: () => {
-      db.transaction((tx) => {
-        tx.executeSql(
-          `DELETE FROM trips WHERE id=${tripId}`,
-          null,
-          () => {
-            loadTrips(context)
-          },
-          (_, error) => {
-            console.error(error)
-            return true
-          }
-        )
-      })
+    callback: async () => {
+      try {
+        db.execAsync(`DELETE FROM trips WHERE id=${tripId}`)
+        await loadTrips(context)
+      } catch (error) {
+        console.error(error)
+      }
       Popup.hide()
     },
     cancelCallback: () => {
@@ -142,25 +130,20 @@ export const addStep = async (
   newStep: TripStep<any>,
   context: TripsContextState
 ) => {
-  const db = getDatabase()
+  const db = await getDatabase()
   const trip = context.currentTrip
 
-  db.transaction((tx) => {
-    let steps = trip.steps ?? []
-    steps.push(newStep)
+  let steps = trip.steps ?? []
+  steps.push(newStep)
 
-    tx.executeSql(
-      `UPDATE trips SET steps='${JSON.stringify(steps)}' WHERE id=${trip.id}`,
-      null,
-      () => {
-        loadTrips(context)
-      },
-      (_, error) => {
-        console.error(error)
-        return true
-      }
+  try {
+    await db.runAsync(
+      `UPDATE trips SET steps='${JSON.stringify(steps)}' WHERE id=${trip.id}`
     )
-  })
+    await loadTrips(context)
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export const updateStep = async (
@@ -168,73 +151,58 @@ export const updateStep = async (
   newStep: TripStep<any>,
   context: TripsContextState
 ) => {
-  const db = getDatabase()
+  const db = await getDatabase()
   const trip = context.currentTrip
 
-  db.transaction((tx) => {
-    let steps = trip.steps ?? []
-    const filteredSteps = steps.filter(
-      (step) =>
-        step.title !== originalStep.title &&
-        step.startDateTime !== originalStep.startDateTime &&
-        step.endDateTime !== originalStep.endDateTime
-    )
-    filteredSteps.push(newStep)
+  let steps = trip.steps ?? []
+  const filteredSteps = steps.filter(
+    (step) =>
+      step.title !== originalStep.title &&
+      step.startDateTime !== originalStep.startDateTime &&
+      step.endDateTime !== originalStep.endDateTime
+  )
+  filteredSteps.push(newStep)
 
-    tx.executeSql(
+  try {
+    await db.runAsync(
       `UPDATE trips SET steps='${JSON.stringify(filteredSteps)}' WHERE id=${
         trip.id
-      }`,
-      null,
-      () => {
-        loadTrips(context)
-      },
-      (_, error) => {
-        console.error(error)
-        return true
-      }
+      }`
     )
-  })
+    await loadTrips(context)
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export const removeStep = async (
   stepToRemove: TripStep<any>,
   context: TripsContextState
 ) => {
-  const db = getDatabase()
+  const db = await getDatabase()
   const trip = context.currentTrip
 
-  db.transaction((tx) => {
-    let steps = trip.steps ?? []
-    const filteredSteps = steps.filter(
-      (step) =>
-        step.title !== stepToRemove.title &&
-        step.startDateTime !== stepToRemove.startDateTime &&
-        step.endDateTime !== stepToRemove.endDateTime
-    )
+  let steps = trip.steps ?? []
+  const filteredSteps = steps.filter(
+    (step) =>
+      step.title !== stepToRemove.title &&
+      step.startDateTime !== stepToRemove.startDateTime &&
+      step.endDateTime !== stepToRemove.endDateTime
+  )
 
-    tx.executeSql(
+  try {
+    await db.runAsync(
       `UPDATE trips SET steps='${JSON.stringify(filteredSteps)}' WHERE id=${
         trip.id
-      }`,
-      null,
-      () => {
-        loadTrips(context)
-      },
-      (_, error) => {
-        console.error(error)
-        return true
-      }
+      }`
     )
-  })
+    await loadTrips(context)
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 const deleteDB = async () => {
-  const db = getDatabase()
-  db.transaction((tx) => {
-    tx.executeSql(`DROP TABLE IF EXISTS trips`, null, null, (_, error) => {
-      console.error(error)
-      return true
-    })
-  })
+  const db = await getDatabase()
+  await db.execAsync(`DROP TABLE IF EXISTS trips`)
 }
