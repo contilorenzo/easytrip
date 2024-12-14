@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { Location } from '../types'
 import TextField from '../../../FormElements/TextField'
 import {
+  Linking,
+  Platform,
   Text,
   TextStyle,
   TouchableOpacity,
@@ -57,6 +59,18 @@ const LocationField = ({ location, setLocation }: Props) => {
     }
   }
 
+  const openInMapsApp = (location: Location) => {
+    const address = location.address
+    const coordinatesString = `${location.coordinates.lat},${location.coordinates.lng}`
+
+    const url = Platform.select({
+      ios: `maps:${coordinatesString}?q=${address}`,
+      android: `geo:${coordinatesString}?q=${address}`,
+    })
+
+    Linking.openURL(url)
+  }
+
   return (
     <>
       {isEditing && (
@@ -100,16 +114,17 @@ const LocationField = ({ location, setLocation }: Props) => {
       )}
 
       {location && (
-        <TouchableOpacity
-          onPress={() => setIsEditing(!isEditing)}
-          style={locationContainerStyles}
-        >
+        <View style={locationContainerStyles}>
           <Text>📍</Text>
-          <Text style={locationStyles}>
+          <Text style={locationStyles} onPress={() => openInMapsApp(location)}>
             {location?.name} - {location?.address}
           </Text>
-          <Ionicons name="create-outline" style={locationIconStyles} />
-        </TouchableOpacity>
+          <Ionicons
+            name="create-outline"
+            style={locationIconStyles}
+            onPress={() => setIsEditing(!isEditing)}
+          />
+        </View>
       )}
     </>
   )
