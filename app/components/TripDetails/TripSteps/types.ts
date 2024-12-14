@@ -40,3 +40,12 @@ export enum VEHICLES {
   FEET = 'feet',
   BOAT = 'boat',
 }
+
+export interface Location {
+  name: string
+  address: string
+  coordinates: {
+    lat: string
+    lng: string
+  }
+}

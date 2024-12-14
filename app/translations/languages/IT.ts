@@ -49,6 +49,7 @@ const IT: Translations = {
   [tk.update]: 'Modifica',
   [tk.delete]: 'Elimina',
   [tk.warning]: 'Attenzione!',
+  [tk.location]: 'Posizione',
 }
 
 export default IT

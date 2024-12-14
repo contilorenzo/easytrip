@@ -19,6 +19,7 @@ const UpdateStep = ({ navigation, stepData }: Props) => {
     title: stepData.title,
     type: stepData.type,
     vehicle: stepData?.extraData?.vehicle,
+    location: stepData?.extraData?.location,
     start: new Date(stepData.startDateTime),
     end: new Date(stepData.endDateTime),
     onSubmit,

@@ -45,6 +45,7 @@ export enum TranslationsKeys {
   update,
   delete,
   warning,
+  location,
 }
 
 export type Translations = {

@@ -5,7 +5,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
-import { StepType, TripStep, VEHICLES } from '../types'
+import { StepType, TripStep, VEHICLES, Location } from '../types'
 import { Ionicons } from '@expo/vector-icons'
 import { primaryCtaStyles } from '../../../common/db/styles/buttons'
 import { t } from '../../../../translations'
@@ -18,8 +18,17 @@ import RadioField from '../../../FormElements/RadioField'
 import { useTripsContext } from '../../../../state/TripsContext'
 import { getVehicleIcon } from '../TripStep/StepTypes/JourneyStep'
 import { getStepTypeIcon } from '../TripStep/StepTypes/DefaultStep'
+import LocationField from './LocationField'
 
-const StepForm = ({ start, end, title, type, vehicle, onSubmit }: Props) => {
+const StepForm = ({
+  start,
+  end,
+  title,
+  type,
+  vehicle,
+  location,
+  onSubmit,
+}: Props) => {
   const trip = useTripsContext().currentTrip
 
   const isFormValid = () =>
@@ -30,6 +39,7 @@ const StepForm = ({ start, end, title, type, vehicle, onSubmit }: Props) => {
   const [_vehicle, setVehicle] = useState<VEHICLES>(vehicle ?? VEHICLES.CAR)
   const [startDateTime, setStartDateTime] = useState<Date>(start)
   const [endDateTime, setEndDateTime] = useState<Date>(end)
+  const [_location, setLocation] = useState<Location>(location)
 
   useEffect(() => {
     if (isAfter(startDateTime, endDateTime))
@@ -44,6 +54,7 @@ const StepForm = ({ start, end, title, type, vehicle, onSubmit }: Props) => {
       endDateTime: endDateTime.toISOString(),
       extraData: {
         ...(_type === StepType.JOURNEY && { vehicle: _vehicle }),
+        ...(_type === StepType.VISIT && _location && { location: _location }),
       },
     }
   }
@@ -82,6 +93,9 @@ const StepForm = ({ start, end, title, type, vehicle, onSubmit }: Props) => {
             }))}
           />
         )}
+        {_type === StepType.VISIT && (
+          <LocationField location={_location} setLocation={setLocation} />
+        )}
         <DateTimeField
           label={t(TranslationsKeys.trip_step_startDateTime)}
           mode="datetime"
@@ -118,6 +132,7 @@ export interface Props {
   title?: string
   type?: StepType
   vehicle?: VEHICLES
+  location?: Location
   onSubmit: (data: TripStep<any>) => void
 }
 

@@ -163,6 +163,8 @@ export const updateStep = async (
   )
   filteredSteps.push(newStep)
 
+  console.log(newStep)
+
   try {
     await db.runAsync(
       `UPDATE trips SET steps='${JSON.stringify(filteredSteps)}' WHERE id=${

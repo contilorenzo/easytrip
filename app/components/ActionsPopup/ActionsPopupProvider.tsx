@@ -25,7 +25,6 @@ export const ActionsPopupProvider = ({ children }) => {
   const [showPopup, setShowPopup] = useState<Boolean>(false)
 
   const showActionsMenu = (config: ActionsMenuConfig) => {
-    console.log('eccomi')
     setActionsMenuConfigState(config)
     setShowPopup(!showPopup)
   }
