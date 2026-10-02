@@ -1,5 +1,9 @@
 {
   "expo": {
+    "name": "easytrip",
+    "icon": "./assets/icon.png",
+    "slug": "easytrip",
+    "orientation": "portrait",
     "scheme": "acme",
     "web": {
       "bundler": "metro"
@@ -7,10 +11,27 @@
     "plugins": [
       "expo-router",
       "expo-asset",
-      "expo-font"
+      "expo-font",
+      "@react-native-community/datetimepicker",
+      "expo-splash-screen",
+      "expo-sqlite",
+      "expo-status-bar",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Visualizza la tua posizione sulla mappa per orientarti durante il viaggio."
+        }
+      ],
+      "expo-sharing",
+      "expo-web-browser",
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "Importa le tue prenotazioni dal calendario per aggiungere gli alloggi ai viaggi.",
+          "remindersPermission": false
+        }
+      ]
     ],
-    "name": "easytrip",
-    "slug": "easytrip",
     "extra": {
       "router": {
         "origin": false
@@ -20,11 +41,27 @@
       }
     },
     "ios": {
-      "bundleIdentifier": "com.contilorenzo.easytrip"
+      "bundleIdentifier": "com.contilorenzo.easytrip",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Visualizza la tua posizione sulla mappa per orientarti durante il viaggio.",
+        "LSApplicationQueriesSchemes": [
+          "comgooglemaps",
+          "citymapper",
+          "waze"
+        ]
+      }
     },
     "android": {
-      "package": "com.contilorenzo.easytrip"
+      "package": "com.contilorenzo.easytrip",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#E53828"
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
-    "newArchEnabled": true
+    "newArchEnabled": false
   }
 }
