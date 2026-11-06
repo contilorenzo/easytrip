@@ -23,6 +23,7 @@ import { canEdit, isOwner, isShared } from '../../utils/tripRole'
 import ShareTripModal from './ShareTripModal'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { GlassTouchable } from '../common/GlassButton'
+import PackingButton from '../Packing/PackingButton'
 
 const DAY_COLORS = [
   '#FF6B6B', // Giorno 1: Corallo
@@ -182,18 +183,33 @@ const TripDetails = () => {
           {/* Condivisione: il proprietario invita, gli altri vedono il proprio ruolo */}
           {isOwner(trip) ? (
             <GlassTouchable style={styles.sharePill} fallbackStyle={styles.sharePillFallback} onPress={() => setIsShareOpen(true)} activeOpacity={0.85}>
-              <Ionicons name="people" size={14} color="#1E293B" />
+              <Ionicons name="people" size={14} color="#FFFFFF" />
               <Text style={styles.sharePillText}>Condividi</Text>
             </GlassTouchable>
           ) : isShared(trip) ? (
             <>
               {/* Elenco dei partecipanti */}
               <GlassTouchable style={styles.sharePill} fallbackStyle={styles.sharePillFallback} onPress={() => setIsParticipantsOpen(true)} activeOpacity={0.85}>
-                <Ionicons name="people" size={14} color="#1E293B" />
+                <Ionicons name="people" size={14} color="#FFFFFF" />
                 <Text style={styles.sharePillText}>Partecipanti</Text>
               </GlassTouchable>
             </>
           ) : null}
+
+          {/* Lista della valigia */}
+          <PackingButton
+            tripId={trip.id}
+            city={trip.city}
+            accentColor="#FF5A5F"
+            render={(open, summary) => (
+              <GlassTouchable style={styles.sharePill} fallbackStyle={styles.sharePillFallback} onPress={open} activeOpacity={0.85}>
+                <Ionicons name={summary.total > 0 && summary.packed === summary.total ? 'bag-check' : 'bag-handle'} size={14} color="#FFFFFF" />
+                <Text style={styles.sharePillText}>
+                  {summary.total > 0 ? `${summary.packed}/${summary.total}` : 'Valigia'}
+                </Text>
+              </GlassTouchable>
+            )}
+          />
         </View>
       </View>
 
@@ -489,16 +505,13 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 12,
   },
-  // Sfondo bianco con ombra: solo senza liquid glass
+  // Come le altre chip: solo senza liquid glass
   sharePillFallback: {
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.25)',
   },
-  sharePillText: { fontSize: 12, fontWeight: '800', color: '#1E293B' },
+  sharePillText: { fontSize: 12, fontWeight: '800', color: '#FFFFFF' },
   // Icona tonda del proprio ruolo (matita = può modificare, occhio = solo lettura)
   roleBadge: {
     width: 28,

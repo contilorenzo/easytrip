@@ -19,13 +19,14 @@ import CountryFlag from '../../common/CountryFlag/CountryFlag'
 import { useFlagTheme, hexToRgba } from '../../../utils/countryTheme'
 import { getTripTickets, TripTicket } from '../../../utils/tripTickets'
 import TripTicketsModal from './TripTicketsModal'
+import PackingButton from '../../Packing/PackingButton'
 
 interface Props {
   trip: Trip
 }
 
 const BarcodeLines = () => {
-  const bars = [2, 1, 3, 1, 2, 4, 1, 2, 3, 1, 1, 3, 2, 1, 4, 2, 1, 3, 1, 2, 3, 1, 2, 4, 1, 3, 2]
+  const bars = [2, 1, 3, 1, 2, 4, 1, 2, 3, 1, 1, 3, 2, 1, 4, 2, 1, 3]
   return (
     <View style={styles.barcodeContainer}>
       {bars.map((w, i) => (
@@ -220,42 +221,46 @@ const OngoingTripCard = ({ trip }: Props) => {
 
             {/* Bottom Barcode Strip & CTA */}
             <View style={styles.footerRow}>
-              {/* Interactive Barcode Button for Tickets */}
-              <TouchableOpacity
-                style={styles.barcodeInteractiveBtn}
-                onPress={(e) => {
-                  e.stopPropagation?.()
-                  setTicketsModalVisible(true)
-                }}
-                activeOpacity={0.78}
-              >
-                <BarcodeLines />
-                <View
-                  style={[
-                    styles.barcodeOverlayBadge,
-                    tickets.length > 0 && {
-                      backgroundColor: hexToRgba(countryTheme.accentColor, 0.12),
-                      borderColor: hexToRgba(countryTheme.accentColor, 0.35),
-                    },
-                  ]}
+              <View style={styles.footerLeft}>
+                {/* Interactive Barcode Button for Tickets */}
+                <TouchableOpacity
+                  style={styles.barcodeInteractiveBtn}
+                  onPress={(e) => {
+                    e.stopPropagation?.()
+                    setTicketsModalVisible(true)
+                  }}
+                  activeOpacity={0.78}
                 >
-                  <Ionicons
-                    name={tickets.length > 0 ? 'ticket' : 'add-circle'}
-                    size={12}
-                    color={tickets.length > 0 ? countryTheme.accentColor : '#4F46E5'}
-                  />
-                  <Text
+                  <BarcodeLines />
+                  <View
                     style={[
-                      styles.barcodeBadgeText,
-                      tickets.length > 0 && { color: countryTheme.accentColor },
+                      styles.barcodeOverlayBadge,
+                      tickets.length > 0 && {
+                        backgroundColor: hexToRgba(countryTheme.accentColor, 0.12),
+                        borderColor: hexToRgba(countryTheme.accentColor, 0.35),
+                      },
                     ]}
                   >
-                    {tickets.length === 0
-                      ? 'Biglietti'
-                      : `${tickets.length} ${tickets.length === 1 ? 'pass' : 'pass'}`}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                    <Ionicons
+                      name={tickets.length > 0 ? 'ticket' : 'add-circle'}
+                      size={12}
+                      color={tickets.length > 0 ? countryTheme.accentColor : '#4F46E5'}
+                    />
+                    <Text
+                      style={[
+                        styles.barcodeBadgeText,
+                        tickets.length > 0 && { color: countryTheme.accentColor },
+                      ]}
+                    >
+                      {tickets.length === 0
+                        ? 'Biglietti'
+                        : `${tickets.length} ${tickets.length === 1 ? 'pass' : 'pass'}`}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+
+                <PackingButton tripId={trip.id} city={trip.city} accentColor={countryTheme.accentColor} size={30} inline />
+              </View>
 
               <View style={styles.openCtaRow}>
                 <Text
@@ -516,6 +521,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   barcodeInteractiveBtn: {
+    flexShrink: 1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 3,
@@ -543,7 +549,15 @@ const styles = StyleSheet.create({
     color: '#4F46E5',
     letterSpacing: 0.2,
   },
+  footerLeft: {
+    flexShrink: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginRight: 14,
+  },
   openCtaRow: {
+    flexShrink: 0,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,

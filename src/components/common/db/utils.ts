@@ -53,6 +53,9 @@ export const getDatabase = async (): Promise<SQLite.SQLiteDatabase> => {
       await db.execAsync(
         'create table if not exists trip_tickets (id integer primary key autoincrement not null, tripId integer not null, name text not null, uri text not null, type text not null, uploadedAt text not null);'
       )
+      await db.execAsync(
+        'create table if not exists trip_packing (id integer primary key autoincrement not null, tripId integer not null, catalogId text, name text not null, categoryId text not null, packed integer not null default 0, createdAt text not null);'
+      )
       return db
     })().catch((error) => {
       dbPromise = null
@@ -77,6 +80,7 @@ export const unlinkTripsFromAccount = async () => {
 export const clearAllLocalTrips = async () => {
   const db = await getDatabase()
   await db.runAsync('DELETE FROM trips')
+  await db.runAsync('DELETE FROM trip_packing')
   await db.runAsync('DELETE FROM trip_tombstones')
 }
 
@@ -191,6 +195,7 @@ export const removeTrip = async (
       [nowISO(), tripId]
     )
     await db.runAsync('DELETE FROM trips WHERE id = ?', [tripId])
+    await db.runAsync('DELETE FROM trip_packing WHERE tripId = ?', [tripId])
     await loadTrips(context)
   } catch (error) {
     console.error(error)
@@ -206,6 +211,7 @@ export const leaveTrip = async (trip: Trip, userId: string, context: TripsContex
     if (error) throw error
   }
   await db.runAsync('DELETE FROM trips WHERE id = ?', [trip.id])
+  await db.runAsync('DELETE FROM trip_packing WHERE tripId = ?', [trip.id])
   await loadTrips(context)
 }
 
@@ -341,6 +347,7 @@ export const clearAllTrips = async (context: TripsContextState) => {
       [nowISO()]
     )
     await db.runAsync('delete from trips')
+    await db.runAsync('delete from trip_packing')
     await loadTrips(context)
   } catch (error) {
     console.error('Error clearing trips:', error)
