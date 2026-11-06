@@ -10,6 +10,7 @@ import { confirmAction } from '../src/utils/confirm'
 import { isOwner } from '../src/utils/tripRole'
 import { leaveTrip } from '../src/components/common/db/utils'
 import { useAccountContext } from '../src/state/AccountContext'
+import NativeNavHeader, { hasNativeHeader } from '../src/components/common/NativeNavHeader'
 import ThemeBackground from '../src/components/common/ThemeBackground'
 import { useFlagTheme } from '../src/utils/countryTheme'
 
@@ -20,13 +21,41 @@ const TripDetailsScreen = () => {
   const { user } = useAccountContext()
   const owner = isOwner(context.currentTrip)
 
+  const handleDelete = () => {
+    if (!context.currentTrip?.id) return
+    confirmAction({
+      title: 'Elimina viaggio',
+      message: `Sei sicuro di voler eliminare il viaggio a ${context.currentTrip.city}?`,
+      onConfirm: async () => {
+        if (context.currentTrip?.id) {
+          await removeTrip(context.currentTrip.id, context)
+        }
+      },
+    })
+  }
+
+  // Viaggio condiviso da altri: non si elimina, si lascia
+  const handleLeave = () => {
+    const trip = context.currentTrip
+    if (!trip || !user) return
+    confirmAction({
+      title: 'Lasciare il viaggio?',
+      message: `Il viaggio a ${trip.city} sparirà dal tuo telefono. Per l'organizzatore e gli altri resta com'è.`,
+      confirmText: 'Lascia',
+      onConfirm: () => leaveTrip(trip, user.id, context),
+    })
+  }
+
   return (
     <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
+      {/* Su iOS indietro ed elimina/lascia stanno nella barra nativa (liquid glass con iOS 26) */}
+      <NativeNavHeader>
+        {owner ? (
+          <Stack.Toolbar.Button icon="trash" accessibilityLabel="Elimina viaggio" onPress={handleDelete} />
+        ) : (
+          <Stack.Toolbar.Button icon="rectangle.portrait.and.arrow.right" accessibilityLabel="Lascia il viaggio" onPress={handleLeave} />
+        )}
+      </NativeNavHeader>
 
       {/* Full-screen Flag Gradient Background */}
       <ThemeBackground
@@ -35,71 +64,27 @@ const TripDetailsScreen = () => {
         style={StyleSheet.absoluteFill}
       />
 
-      {/* Floating Header Buttons */}
-      <View
-        style={[
-          styles.floatingHeader,
-          { top: Math.max(insets.top, 16) + 4 }
-        ]}
-        pointerEvents="box-none"
-      >
-        <TouchableOpacity
-          style={styles.floatingButton}
-          onPress={() => {
-            if (router.canGoBack()) {
-              router.back()
-            } else {
-              router.replace('/')
-            }
-          }}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
-        </TouchableOpacity>
+      {/* Pulsanti disegnati a mano: solo dove non c'è la barra nativa (Android) */}
+      {!hasNativeHeader && (
+        <View style={[styles.floatingHeader, { top: Math.max(insets.top, 16) + 4 }]} pointerEvents="box-none">
+          <TouchableOpacity
+            style={styles.floatingButton}
+            onPress={() => {
+              if (router.canGoBack()) router.back()
+              else router.replace('/')
+            }}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
+          </TouchableOpacity>
 
-        <View style={styles.rightButtons}>
-          {owner ? (
-            <>
-            <TouchableOpacity
-              style={styles.floatingButton}
-              onPress={() => {
-                if (!context.currentTrip?.id) return
-                confirmAction({
-                  title: 'Elimina viaggio',
-                  message: `Sei sicuro di voler eliminare il viaggio a ${context.currentTrip.city}?`,
-                  onConfirm: async () => {
-                    if (context.currentTrip?.id) {
-                      await removeTrip(context.currentTrip.id, context)
-                    }
-                  },
-                })
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="trash-outline" size={20} color="#FFFFFF" />
+          <View style={styles.rightButtons}>
+            <TouchableOpacity style={styles.floatingButton} onPress={owner ? handleDelete : handleLeave} activeOpacity={0.7}>
+              <Ionicons name={owner ? 'trash-outline' : 'log-out-outline'} size={owner ? 20 : 21} color="#FFFFFF" />
             </TouchableOpacity>
-            </>
-          ) : (
-            /* Viaggio condiviso da altri: non si elimina, si lascia */
-            <TouchableOpacity
-              style={styles.floatingButton}
-              onPress={() => {
-                const trip = context.currentTrip
-                if (!trip || !user) return
-                confirmAction({
-                  title: 'Lasciare il viaggio?',
-                  message: `Il viaggio a ${trip.city} sparirà dal tuo telefono. Per l'organizzatore e gli altri resta com'è.`,
-                  confirmText: 'Lascia',
-                  onConfirm: () => leaveTrip(trip, user.id, context),
-                })
-              }}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="log-out-outline" size={21} color="#FFFFFF" />
-            </TouchableOpacity>
-          )}
+          </View>
         </View>
-      </View>
+      )}
 
       <TripDetails />
 

@@ -1,10 +1,11 @@
 import React from 'react'
-import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { ROUTES } from '../common/db/routes'
 import { useAccountContext } from '../../state/AccountContext'
 import UserAvatar from './UserAvatar'
+import GlassButton from '../common/GlassButton'
 
 // Pulsante tondo nell'angolo della home: apre account e sincronizzazione e mostra lo stato di sync con un piccolo badge
 const AccountButton = () => {
@@ -44,28 +45,22 @@ const AccountButton = () => {
   }
 
   return (
-    <TouchableOpacity style={styles.button} onPress={() => router.push(ROUTES.SETTINGS)} activeOpacity={0.8}>
-      {user ? (
-        <UserAvatar user={user} size={36} backgroundColor="transparent" />
-      ) : (
-        <Ionicons name="person-outline" size={19} color="white" />
-      )}
+    <View style={styles.wrapper}>
+      <GlassButton onPress={() => router.push(ROUTES.SETTINGS)} accessibilityLabel="Account e sincronizzazione">
+        {user ? (
+          <UserAvatar user={user} size={36} backgroundColor="transparent" />
+        ) : (
+          <Ionicons name="person-outline" size={19} color="white" />
+        )}
+      </GlassButton>
       {renderBadge()}
-    </TouchableOpacity>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  button: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    backgroundColor: 'rgba(255, 255, 255, 0.22)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.45)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  wrapper: { width: 38, height: 38 },
+
   badge: {
     position: 'absolute',
     right: -3,

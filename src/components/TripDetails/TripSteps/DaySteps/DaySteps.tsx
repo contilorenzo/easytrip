@@ -33,6 +33,7 @@ import { ROUTES } from '../../../common/db/routes'
 import { router } from 'expo-router'
 import { addStep } from '../../../common/db/utils'
 import { it } from 'date-fns/locale'
+import DayNearbyPlaces, { DayNearbyButton, dayCenter } from './DayNearbyPlaces'
 
 const getOccupiedIntervals = (steps: TripStepType<any>[], day: string) => {
   const occupiedIntervals: Interval[] = []
@@ -57,8 +58,12 @@ const DaySteps = ({ day, steps, onStepPress, selectedStep, scrollY, onDayLayout,
   // Chi ha accesso in sola lettura non può aggiungere tappe
   const editable = canEdit(trip)
   const [dayLayout, setDayLayout] = useState<{ y: number; height: number }>({ y: 0, height: 0 })
+  // Consigli su dove mangiare e dormire aperti sotto le tappe del giorno
+  const [nearbyOpen, setNearbyOpen] = useState(false)
 
-  const maxTranslate = Math.max(0, dayLayout.height - 54)
+  // Altezza del blocco che segue lo scorrimento (data + pulsante): serve a fermarlo prima del giorno successivo
+  const [stickyHeight, setStickyHeight] = useState(54)
+  const maxTranslate = Math.max(0, dayLayout.height - stickyHeight)
   const translateY = scrollY && maxTranslate > 0
     ? scrollY.interpolate({
         inputRange: [dayLayout.y, dayLayout.y + maxTranslate],
@@ -209,7 +214,10 @@ const DaySteps = ({ day, steps, onStepPress, selectedStep, scrollY, onDayLayout,
       }}
     >
       <View style={dayColumnStyles}>
-        <Animated.View style={[dayStyles, { transform: [{ translateY }] }]}>
+        <Animated.View
+          style={[dayStyles, { transform: [{ translateY }] }]}
+          onLayout={(e) => setStickyHeight(Math.round(e.nativeEvent.layout.height))}
+        >
           <Text style={{ fontWeight: '800', fontSize: stepFont(9.5), color: '#64748B', textTransform: 'uppercase', letterSpacing: 0.3, textAlign: 'center' }}>
             {formatDate(day, 'EEE')}
           </Text>
@@ -218,6 +226,8 @@ const DaySteps = ({ day, steps, onStepPress, selectedStep, scrollY, onDayLayout,
               {formatDate(day, 'dd/MM')}
             </Text>
           </View>
+          {/* Consigli su dove mangiare e dormire (finestra) */}
+          {steps.length > 0 && dayCenter(steps) && <DayNearbyButton open={nearbyOpen} onPress={() => setNearbyOpen((prev) => !prev)} />}
         </Animated.View>
       </View>
       <View style={stepsColumnStyles}>
@@ -348,6 +358,11 @@ const DaySteps = ({ day, steps, onStepPress, selectedStep, scrollY, onDayLayout,
             )
           }
         })()}
+
+        {/* Finestra dei consigli per mangiare e dormire (si apre dal pulsante nella colonna del giorno) */}
+        {steps.length > 0 && (
+          <DayNearbyPlaces steps={steps} open={nearbyOpen} onClose={() => setNearbyOpen(false)} dayLabel={formatDate(day, 'EEEE d MMMM')} />
+        )}
       </View>
     </View>
   )

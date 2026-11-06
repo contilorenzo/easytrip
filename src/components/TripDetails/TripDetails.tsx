@@ -22,6 +22,7 @@ import EditTripDatesModal from './EditTripDatesModal'
 import { canEdit, isOwner, isShared } from '../../utils/tripRole'
 import ShareTripModal from './ShareTripModal'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { GlassTouchable } from '../common/GlassButton'
 
 const DAY_COLORS = [
   '#FF6B6B', // Giorno 1: Corallo
@@ -159,8 +160,9 @@ const TripDetails = () => {
         </View>
 
         <View style={styles.headerActionsRow}>
-          <TouchableOpacity
+          <GlassTouchable
             style={styles.datesChip}
+            fallbackStyle={styles.datesChipFallback}
             onPress={() => canEdit(trip) && setIsEditDatesOpen(true)}
             activeOpacity={canEdit(trip) ? 0.8 : 1}
           >
@@ -175,21 +177,21 @@ const TripDetails = () => {
             {canEdit(trip) && (
               <Ionicons name="pencil" size={11} color="rgba(255, 255, 255, 0.85)" style={{ marginLeft: 8 }} />
             )}
-          </TouchableOpacity>
+          </GlassTouchable>
 
           {/* Condivisione: il proprietario invita, gli altri vedono il proprio ruolo */}
           {isOwner(trip) ? (
-            <TouchableOpacity style={styles.sharePill} onPress={() => setIsShareOpen(true)} activeOpacity={0.85}>
+            <GlassTouchable style={styles.sharePill} fallbackStyle={styles.sharePillFallback} onPress={() => setIsShareOpen(true)} activeOpacity={0.85}>
               <Ionicons name="people" size={14} color="#1E293B" />
               <Text style={styles.sharePillText}>Condividi</Text>
-            </TouchableOpacity>
+            </GlassTouchable>
           ) : isShared(trip) ? (
             <>
               {/* Elenco dei partecipanti */}
-              <TouchableOpacity style={styles.sharePill} onPress={() => setIsParticipantsOpen(true)} activeOpacity={0.85}>
+              <GlassTouchable style={styles.sharePill} fallbackStyle={styles.sharePillFallback} onPress={() => setIsParticipantsOpen(true)} activeOpacity={0.85}>
                 <Ionicons name="people" size={14} color="#1E293B" />
                 <Text style={styles.sharePillText}>Partecipanti</Text>
-              </TouchableOpacity>
+              </GlassTouchable>
             </>
           ) : null}
         </View>
@@ -483,10 +485,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
+  },
+  // Sfondo bianco con ombra: solo senza liquid glass
+  sharePillFallback: {
+    backgroundColor: '#FFFFFF',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
@@ -507,14 +512,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.18)',
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.25)',
     flexShrink: 1,
   },
+  datesChipFallback: {
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.25)',
+  },
+
   dateText: {
     color: '#FFFFFF',
     fontSize: 12,

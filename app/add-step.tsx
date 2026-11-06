@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import AddStep from '../src/components/TripDetails/TripSteps/AddStep.tsx/AddStep'
-import { useLocalSearchParams, Stack } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { StepType } from '../src/components/TripDetails/TripSteps/types'
 
 const AddStepScreen = () => {
@@ -8,8 +8,7 @@ const AddStepScreen = () => {
 
   return (
     <>
-      {/* L'intestazione è disegnata dal form (gradiente con titolo e pulsante indietro) */}
-      <Stack.Screen options={{ headerShown: false }} />
+      {/* L'intestazione (gradiente con titolo) è disegnata dal form, che gestisce anche la barra nativa */}
       <View style={{ flex: 1, backgroundColor: '#F8F9FA' }}>
         <AddStep
           start={new Date(params.start)}

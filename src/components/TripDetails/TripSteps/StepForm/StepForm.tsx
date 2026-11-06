@@ -22,7 +22,7 @@ import DateTimeField from '../../../FormElements/DateTimeField'
 import { useEffect, useState } from 'react'
 import { addHours, addMinutes, isAfter, isSameDay, format } from 'date-fns'
 import { it } from 'date-fns/locale'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams, Stack } from 'expo-router'
 import RadioField from '../../../FormElements/RadioField'
 import { useTripsContext } from '../../../../state/TripsContext'
 import { getStepTypeIcon } from '../TripStep/StepTypes/DefaultStep'
@@ -32,6 +32,8 @@ import { KeyboardAvoider, keyboardScrollProps } from '../../../common/KeyboardAv
 import { CalendarStay } from '../../../../services/calendarImport'
 import { geocodeStayAddress } from '../../../../services/geocoding'
 import { addDays, subDays, startOfDay, setHours, setMinutes } from 'date-fns'
+import { hasNativeHeader } from '../../../common/NativeNavHeader'
+import NativeNavHeader from '../../../common/NativeNavHeader'
 
 const StepForm = ({
   start,
@@ -349,6 +351,11 @@ const StepForm = ({
         {...keyboardScrollProps}
         contentContainerStyle={{ paddingBottom: 110 }}
       >
+        {/* Su iOS indietro ed elimina stanno nella barra nativa (liquid glass con iOS 26) */}
+        <NativeNavHeader>
+          {onDelete ? <Stack.Toolbar.Button icon="trash" accessibilityLabel="Elimina tappa" onPress={onDelete} /> : null}
+        </NativeNavHeader>
+
         {/* Intestazione compatta con gradiente, come "Nuovo viaggio" */}
         <LinearGradient
           colors={['#E11D48', '#FF5A5F', '#FF7A59']}
@@ -357,11 +364,16 @@ const StepForm = ({
           style={[heroStyles.hero, { paddingTop: Math.max(insets.top, 16) + 4 }]}
         >
           <View style={heroStyles.row}>
-            <TouchableOpacity style={heroStyles.backButton} onPress={handleBack} activeOpacity={0.8}>
-              <Ionicons name="chevron-back" size={22} color="white" />
-            </TouchableOpacity>
+            {/* Su iOS indietro (e elimina) sono nella barra nativa: qui restano solo gli spazi */}
+            {hasNativeHeader ? (
+              <View style={heroStyles.spacer} />
+            ) : (
+              <TouchableOpacity style={heroStyles.backButton} onPress={handleBack} activeOpacity={0.8}>
+                <Ionicons name="chevron-back" size={22} color="white" />
+              </TouchableOpacity>
+            )}
             <Text style={heroStyles.title}>{heading}</Text>
-            {onDelete ? (
+            {onDelete && !hasNativeHeader ? (
               <TouchableOpacity style={heroStyles.backButton} onPress={onDelete} activeOpacity={0.8}>
                 <Ionicons name="trash-outline" size={20} color="white" />
               </TouchableOpacity>

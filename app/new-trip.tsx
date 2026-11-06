@@ -1,13 +1,13 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import NewTripForm from '../src/components/AddNewTrip/NewTripForm'
-import { Stack } from 'expo-router'
+import NativeNavHeader from '../src/components/common/NativeNavHeader'
 
 const NewTripScreen = () => {
   return (
     <View style={styles.screen}>
       {/* L'intestazione è disegnata dal form (hero con gradiente) */}
-      <Stack.Screen options={{ headerShown: false }} />
+      <NativeNavHeader />
       <NewTripForm />
     </View>
   )

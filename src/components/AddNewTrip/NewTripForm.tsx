@@ -15,6 +15,8 @@ import DateRangeField from './DateRangeField'
 import { KeyboardAvoider, keyboardScrollProps } from '../common/KeyboardAvoider'
 import { addTrip, addFullTrip } from '../common/db/utils'
 import JoinTripForm from '../Account/JoinTripForm'
+import { hasNativeHeader } from '../common/NativeNavHeader'
+import { getCountriesOptions } from '../../services/countries'
 import { loadTripIdeas, IdeaAttraction, ItineraryStep } from '../../services/tripIdeas'
 import { buildIdeaSteps, buildItinerarySteps } from '../../utils/ideaSteps'
 import AiSuggestions, { AiSuggestionsResult } from './AiSuggestions'
@@ -172,9 +174,14 @@ const NewTripForm = () => {
           style={[styles.hero, { paddingTop: Math.max(insets.top, 16) + 4 }]}
         >
           <View style={styles.heroRow}>
-            <TouchableOpacity style={styles.backButton} onPress={handleBack} activeOpacity={0.8}>
-              <Ionicons name="chevron-back" size={22} color="white" />
-            </TouchableOpacity>
+            {/* Su iOS l'indietro è quello nativo della barra: qui resta solo lo spazio */}
+            {hasNativeHeader ? (
+              <View style={styles.heroSpacer} />
+            ) : (
+              <TouchableOpacity style={styles.backButton} onPress={handleBack} activeOpacity={0.8}>
+                <Ionicons name="chevron-back" size={22} color="white" />
+              </TouchableOpacity>
+            )}
             <Text style={styles.heroTitle}>Nuovo viaggio</Text>
             <View style={styles.heroSpacer} />
           </View>
@@ -290,25 +297,6 @@ const NewTripForm = () => {
       </View>
     </KeyboardAvoider>
   )
-}
-
-const getCountriesOptions = async () => {
-  try {
-    const res = await fetch('https://flagcdn.com/it/codes.json')
-    const countriesObj = await res.json()
-
-    const countriesOptions: AutocompleteDropdownItem[] = Object.entries(
-      countriesObj
-    ).map(([key, value]) => ({
-      id: key,
-      title: String(value ?? ''),
-    }))
-
-    return countriesOptions
-  } catch (error) {
-    console.error('Failed to load countries:', error)
-    return []
-  }
 }
 
 const styles = StyleSheet.create({

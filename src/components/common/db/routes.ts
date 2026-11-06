@@ -4,4 +4,5 @@ export enum ROUTES {
   TRIP_DETAILS = '/trip-details',
   NEW_TRIP = '/new-trip',
   SETTINGS = '/settings',
+  TRAVEL_MAP = '/travel-map',
 }

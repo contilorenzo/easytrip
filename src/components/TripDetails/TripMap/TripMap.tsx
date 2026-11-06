@@ -17,6 +17,7 @@ import { geocodeQuery } from '../../../services/geocoding'
 import { getCachedRoute, routeKey, setCachedRoute } from '../../../services/routeCache'
 import { simplifyPath } from '../../../utils/simplifyPath'
 import { MAPBOX_TOKEN } from '../../../utils/mapbox'
+import GlassButton, { GlassPill } from '../../common/GlassButton'
 
 // Mappa Leaflet (Android) tenuta in parallelo ma disattivata: ora tutte le piattaforme usano react-native-maps.
 // Metti a true per riattivarla su Android.
@@ -784,31 +785,19 @@ const TripMap = ({ steps, selectedStep, selectedDay, setSelectedDay, isSticky = 
 
         {/* Floating action buttons in top-right corner of map */}
         <View style={styles.floatingControlsContainer}>
-          <TouchableOpacity
-            style={styles.floatingButton}
-            onPress={handleOpenFullscreen}
-            activeOpacity={0.8}
-          >
+          <GlassButton size={34} variant="map" onPress={handleOpenFullscreen}>
             <Ionicons name="expand-outline" size={16} color="#333" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.floatingButton}
-            onPress={handleToggleMapType}
-            activeOpacity={0.8}
-          >
+          </GlassButton>
+          <GlassButton size={34} variant="map" onPress={handleToggleMapType}>
             <Ionicons
               name={mapType === 'hybrid' ? 'map-outline' : 'earth'}
               size={16}
               color={mapType === 'hybrid' ? '#0284C7' : '#333'}
             />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.floatingButton}
-            onPress={() => handleCenterOnUser(mapRef)}
-            activeOpacity={0.8}
-          >
+          </GlassButton>
+          <GlassButton size={34} variant="map" onPress={() => handleCenterOnUser(mapRef)}>
             <Ionicons name="locate" size={16} color={userLocation ? '#007AFF' : '#666'} />
-          </TouchableOpacity>
+          </GlassButton>
         </View>
 
         {USE_LEAFLET_MAP && selectedStep?.extraData?.location && (
@@ -904,15 +893,11 @@ const TripMap = ({ steps, selectedStep, selectedDay, setSelectedDay, isSticky = 
             pointerEvents="box-none"
           >
             <View style={styles.fullscreenTopBar} pointerEvents="box-none">
-              <TouchableOpacity
-                style={styles.floatingButton}
-                onPress={() => setIsFullscreen(false)}
-                activeOpacity={0.8}
-              >
+              <GlassButton size={34} variant="map" onPress={() => setIsFullscreen(false)}>
                 <Ionicons name="chevron-back" size={17} color="#000" />
-              </TouchableOpacity>
+              </GlassButton>
 
-              <View style={styles.fullscreenSelectorPill}>
+              <GlassPill style={styles.fullscreenSelectorShape} fallbackStyle={styles.fullscreenSelectorFallback}>
                 <TouchableOpacity onPress={handlePrevDay} disabled={selectedDayIndex === 0} style={styles.arrowButton}>
                   <Ionicons name="chevron-back" size={20} color={selectedDayIndex === 0 ? '#bbb' : '#333'} />
                 </TouchableOpacity>
@@ -929,27 +914,19 @@ const TripMap = ({ steps, selectedStep, selectedDay, setSelectedDay, isSticky = 
                 <TouchableOpacity onPress={handleNextDay} disabled={selectedDayIndex === dayOptions.length - 1} style={styles.arrowButton}>
                   <Ionicons name="chevron-forward" size={20} color={selectedDayIndex === dayOptions.length - 1 ? '#bbb' : '#333'} />
                 </TouchableOpacity>
-              </View>
+              </GlassPill>
 
-              <TouchableOpacity
-                style={styles.floatingButton}
-                onPress={handleToggleMapType}
-                activeOpacity={0.8}
-              >
+              <GlassButton size={34} variant="map" onPress={handleToggleMapType}>
                 <Ionicons
                   name={mapType === 'hybrid' ? 'map-outline' : 'earth'}
                   size={16}
                   color={mapType === 'hybrid' ? '#0284C7' : '#333'}
                 />
-              </TouchableOpacity>
+              </GlassButton>
 
-              <TouchableOpacity
-                style={styles.floatingButton}
-                onPress={() => handleCenterOnUser(fullscreenMapRef)}
-                activeOpacity={0.8}
-              >
+              <GlassButton size={34} variant="map" onPress={() => handleCenterOnUser(fullscreenMapRef)}>
                 <Ionicons name="locate" size={16} color={userLocation ? '#007AFF' : '#666'} />
-              </TouchableOpacity>
+              </GlassButton>
             </View>
           </View>
 
@@ -1111,20 +1088,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
   },
-  fullscreenSelectorPill: {
+  // Forma della pillola del selettore giorno; lo sfondo bianco con ombra serve solo senza liquid glass
+  fullscreenSelectorShape: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 22,
+  },
+  fullscreenSelectorFallback: {
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 5,
     elevation: 4,
   },
+
   svgMarkerContainer: {
     alignItems: 'center',
     justifyContent: 'center',

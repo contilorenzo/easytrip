@@ -15,6 +15,7 @@ import AddNewTripButton from '../../src/components/AddNewTrip/AddNewTripButton'
 import TripsList from '../../src/components/TripsList/TripsList'
 import TripIdeas from '../../src/components/TripsList/TripIdeas'
 import AccountButton from '../../src/components/Account/AccountButton'
+import TravelMapButton from '../../src/components/TravelMap/TravelMapButton'
 import { useTripsContext } from '../../src/state/TripsContext'
 import { Stack } from 'expo-router'
 
@@ -125,6 +126,11 @@ const HomeScreen = () => {
         <AccountButton />
       </View>
 
+      {/* Mappa dei paesi visitati, speculare al pulsante dell'account */}
+      <View style={[styles.travelMapButtonWrapper, { top: insets.top + 8 }]}>
+        <TravelMapButton />
+      </View>
+
     </View>
   )
 }
@@ -176,6 +182,11 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     paddingBottom: 40,
     flex: 1,
+  },
+  travelMapButtonWrapper: {
+    position: 'absolute',
+    left: 16,
+    zIndex: 50,
   },
   accountButtonWrapper: {
     position: 'absolute',

@@ -20,6 +20,7 @@ import { useTripsContext } from '../../state/TripsContext'
 import { confirmAction } from '../../utils/confirm'
 import { KeyboardAvoider, keyboardScrollProps } from '../common/KeyboardAvoider'
 import JoinTripForm from '../Account/JoinTripForm'
+import GlassButton from '../common/GlassButton'
 import UserAvatar from '../Account/UserAvatar'
 import * as ImagePicker from 'expo-image-picker'
 import { removeCustomPhoto, setCustomName, setCustomPhoto } from '../../services/auth'
@@ -219,9 +220,9 @@ const Settings = () => {
   return (
     <KeyboardAvoider style={styles.screen}>
       <View style={styles.topBar}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBack} activeOpacity={0.7}>
+        <GlassButton onPress={handleBack} variant="onLight" accessibilityLabel="Indietro">
           <Ionicons name="chevron-back" size={20} color="#1E293B" />
-        </TouchableOpacity>
+        </GlassButton>
         <Text style={styles.topBarTitle}>Account</Text>
         <View style={styles.backButton} />
       </View>
