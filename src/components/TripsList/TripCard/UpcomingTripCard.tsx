@@ -165,10 +165,9 @@ const UpcomingTripCard = ({ trip }: Props) => {
             </View>
 
             <View style={styles.stepsRow}>
-              <View style={styles.stepsInfo}>
-                <Text style={styles.stepsText}>
-                  {stepsCount} {stepsCount === 1 ? 'tappa' : 'tappe'}
-                </Text>
+              <View style={styles.stepsInfo} accessible accessibilityLabel={`${stepsCount} ${stepsCount === 1 ? 'tappa' : 'tappe'}`}>
+                <Ionicons name="location" size={12} color="#64748B" />
+                <Text style={styles.stepsText}>{stepsCount}</Text>
               </View>
               <PackingButton tripId={trip.id} city={trip.city} accentColor={countryTheme.accentColor} size={22} inline />
             </View>

@@ -22,6 +22,7 @@ import { KeyboardAvoider, keyboardScrollProps } from '../common/KeyboardAvoider'
 import JoinTripForm from '../Account/JoinTripForm'
 import GlassButton from '../common/GlassButton'
 import UserAvatar from '../Account/UserAvatar'
+import FlightSettingsCard from '../Flights/FlightSettingsCard'
 import * as ImagePicker from 'expo-image-picker'
 import { removeCustomPhoto, setCustomName, setCustomPhoto } from '../../services/auth'
 
@@ -456,6 +457,9 @@ const Settings = () => {
             )}
           </>
         )}
+
+        {/* Suggerimenti voli: valgono anche senza account */}
+        <FlightSettingsCard />
       </ScrollView>
     </KeyboardAvoider>
   )

@@ -32,9 +32,8 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import CountryFlag from '../common/CountryFlag/CountryFlag'
 import { extractFlagTheme } from '../../utils/countryTheme'
+import FlightSuggestionCard from '../Flights/FlightSuggestionCard'
 
-const today = new Date()
-const oneWeekFromToday = new Date(Date.now() + 604800000)
 
 const NewTripForm = () => {
   const context = useTripsContext()
@@ -44,10 +43,11 @@ const NewTripForm = () => {
   const params = useLocalSearchParams<{ city?: string; country?: string; days?: string; idea?: string }>()
   const [country, setCountry] = useState<AutocompleteDropdownItem | null>(null)
   const [city, setCity] = useState<string>(params.city ?? '')
-  const [startDate, setStartDate] = useState<Date>(today)
-  // Con la durata di un'idea: parte oggi e dura quel numero di giorni (primo e ultimo compresi)
+  // Le date partono da una settimana da oggi (calcolate all'apertura del form, non all'avvio dell'app)
+  const [startDate, setStartDate] = useState<Date>(() => addDays(new Date(), 7))
+  // Con la durata di un'idea: dura quel numero di giorni (primo e ultimo compresi); altrimenti una settimana dopo l'inizio
   const ideaDays = Number(params.days)
-  const [endDate, setEndDate] = useState<Date>(ideaDays > 0 ? addDays(today, ideaDays - 1) : oneWeekFromToday)
+  const [endDate, setEndDate] = useState<Date>(() => addDays(addDays(new Date(), 7), ideaDays > 0 ? ideaDays - 1 : 7))
   const [isSubmitting, setIsSubmitting] = useState(false)
   // Tappe proposte dall'idea di viaggio (se si arriva da lì) e quelle tolte dall'utente
   const [ideaStops, setIdeaStops] = useState<IdeaAttraction[]>([])
@@ -271,6 +271,15 @@ const NewTripForm = () => {
               onChange={setAiResult}
             />
           )}
+
+          {/* Suggerimento voli: discreto, non blocca il salvataggio del viaggio */}
+          <FlightSuggestionCard
+            compact
+            city={city}
+            countryId={country?.id ? String(country.id) : null}
+            startDate={startDate}
+            endDate={endDate}
+          />
 
           {/* Alternativa: unirsi a un viaggio condiviso con un codice invito */}
           <JoinTripForm title="Oppure unisciti a un viaggio" replaceScreen />

@@ -24,6 +24,9 @@ import ShareTripModal from './ShareTripModal'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { GlassTouchable } from '../common/GlassButton'
 import PackingButton from '../Packing/PackingButton'
+import FlightSuggestionCard from '../Flights/FlightSuggestionCard'
+import TravelTipsCard from '../Flights/TravelTipsCard'
+import { useTripHasFlights } from '../Flights/useTripHasFlights'
 
 const DAY_COLORS = [
   '#FF6B6B', // Giorno 1: Corallo
@@ -47,6 +50,7 @@ const TripDetails = () => {
   const [isEditDatesOpen, setIsEditDatesOpen] = useState(false)
   const [isShareOpen, setIsShareOpen] = useState(false)
   const [isParticipantsOpen, setIsParticipantsOpen] = useState(false)
+  const flights = useTripHasFlights(trip)
 
   const tripDays = useMemo(() => {
     if (!trip?.startDate || !trip?.endDate) return []
@@ -310,6 +314,30 @@ const TripDetails = () => {
           )}
           scrollEventThrottle={16}
         >
+          {/* Suggerimento voli: solo finché il viaggio non ha biglietti né tappe in aereo */}
+          {flights.known && !flights.hasFlights && selectedDay === 'ALL' && (
+            <View style={{ marginHorizontal: 4, marginBottom: 12, marginTop: 4 }}>
+              <FlightSuggestionCard
+                city={trip.city}
+                countryId={trip.country?.id ? String(trip.country.id) : null}
+                startDate={new Date(trip.startDate)}
+                endDate={new Date(trip.endDate)}
+              />
+            </View>
+          )}
+
+          {/* Consigli di viaggio (esperienze, bagagli, auto, transfer, eSIM): solo per viaggi non ancora iniziati */}
+          {selectedDay === 'ALL' && new Date(trip.startDate).getTime() > Date.now() && (
+            <View style={{ marginHorizontal: 4, marginBottom: 12 }}>
+              <TravelTipsCard
+                city={trip.city}
+                countryId={trip.country?.id ? String(trip.country.id) : null}
+                startDate={new Date(trip.startDate)}
+                endDate={new Date(trip.endDate)}
+              />
+            </View>
+          )}
+
           {/* Toccando lo spazio vuoto tra e sotto le tappe si deseleziona quella corrente */}
           <Pressable style={styles.deselectArea} onPress={() => setSelectedStep(null)}>
             <TripSteps 
